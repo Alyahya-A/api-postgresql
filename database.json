@@ -1,0 +1,17 @@
+{
+    "dev": {
+        "driver": "pg",
+        "host": "localhost",
+        "database": "full_stack_dev",
+        "user": "postgres",
+        "password": "Aa123456"
+    },
+    "test": {
+        "driver": "pg",
+        "host": "localhost",
+        "database": "full_stack_test",
+        "user": "postgres",
+        "password": "Aa123456"
+    },
+    "sql-file": true
+}
