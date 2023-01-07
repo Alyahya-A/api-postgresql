@@ -2,14 +2,14 @@
     "dev": {
         "driver": "pg",
         "host": "localhost",
-        "database": "full_stack_dev",
+        "database": "storefront_backend_dev",
         "user": "postgres",
         "password": "Aa123456"
     },
     "test": {
         "driver": "pg",
         "host": "localhost",
-        "database": "full_stack_test",
+        "database": "storefront_backend_test",
         "user": "postgres",
         "password": "Aa123456"
     },

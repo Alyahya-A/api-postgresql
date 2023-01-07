@@ -1,0 +1,4 @@
+CREATE TABLE lk_status (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
