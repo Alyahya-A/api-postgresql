@@ -28,7 +28,7 @@ export class CategoryController {
     const allCategories: Category[] =
       await this._categoryService.getAllCategories();
 
-    if (!allCategories) {
+    if (allCategories.length == 0) {
       return res.status(StatusCode.notFound).json(new NotDataFoundError());
     }
 

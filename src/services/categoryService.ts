@@ -16,7 +16,7 @@ export class CategoryService {
     if (await this._categoryRepo.existsByName(body.name)) {
       throw new APIError(
         `Category \"${body.name}\" is already exists`,
-        2001,
+        1200,
         StatusCode.badRequest,
         true
       );
@@ -37,7 +37,7 @@ export class CategoryService {
     if (!(await this._categoryRepo.exists(id))) {
       throw new APIError(
         `Category \"${id}\" is not exists`,
-        2000,
+        1201,
         StatusCode.badRequest,
         true
       );

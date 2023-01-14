@@ -27,7 +27,7 @@ export class ProductController {
   ) {
     const allProducts: Product[] = await this._productService.getAllProducts();
 
-    if (!allProducts) {
+    if (allProducts.length == 0) {
       return res.status(StatusCode.notFound).json(new NotDataFoundError());
     }
 
