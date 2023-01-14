@@ -7,6 +7,7 @@ import {
   httpGet,
   httpPost,
   request,
+  requestBody,
   requestParam,
   response
 } from "inversify-express-utils";
@@ -51,11 +52,8 @@ export class ProductController {
 
   // Create product
   @httpPost("/")
-  async create(
-    @request() req: express.Request,
-    @response() res: express.Response
-  ) {
-    const created: Product = await this._productService.createProduct(req.body);
+  async create(@requestBody() req: Product, @response() res: express.Response) {
+    const created: Product = await this._productService.createProduct(req);
     return res.status(StatusCode.created).json(created);
   }
 

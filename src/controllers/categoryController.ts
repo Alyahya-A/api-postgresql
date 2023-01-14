@@ -6,6 +6,7 @@ import {
   httpGet,
   httpPost,
   request,
+  requestBody,
   requestParam,
   response
 } from "inversify-express-utils";
@@ -53,14 +54,12 @@ export class CategoryController {
   // Create category
   @httpPost("/")
   async create(
-    @request() req: express.Request,
+    @requestBody() req: Category,
     @response() res: express.Response
   ) {
     console.log(req);
     try {
-      const created: Category = await this._categoryService.createCategory(
-        req.body
-      );
+      const created: Category = await this._categoryService.createCategory(req);
       return res.status(StatusCode.created).json(created);
     } catch (error) {
       errorHandler.throw(res, error);

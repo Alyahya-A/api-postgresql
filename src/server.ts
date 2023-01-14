@@ -15,7 +15,7 @@ import { loggerMiddleware } from "./middlewares/logger";
 // Controllers
 import "./controllers/categoryController";
 import "./controllers/productController";
-import "./controllers/StatusController";
+import "./controllers/statusController";
 
 console.clear();
 

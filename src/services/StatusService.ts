@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { StatusCode } from "../consts/statusCodes";
 import { LkStatus } from "../interfaces/lkStatus";
 import { APIError } from "../models/errors/apiError";
-import { StatusRepository } from "../repositories/StatusRepository";
+import { StatusRepository } from "../repositories/statusRepository";
 
 @injectable()
 export class StatusService {

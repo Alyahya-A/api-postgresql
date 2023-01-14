@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { Secret } from "jsonwebtoken";
 import path from "path";
 
 // Parsing the env file.
@@ -16,6 +17,7 @@ interface Config {
   PostgresUser: string | undefined;
   PostgresPassword: string | undefined;
   ENV: string | undefined;
+  Secret: Secret;
 }
 
 // Loading process.env as ENV interface
@@ -28,7 +30,8 @@ const getConfig = (): Config => {
     PostgresTestDB: process.env.POSTGRES_TEST_DB,
     PostgresUser: process.env.POSTGRES_USER,
     PostgresPassword: process.env.POSTGRES_PASSWORD,
-    ENV: process.env.ENV
+    ENV: process.env.ENV,
+    Secret: process.env.TOKEN_KEY as Secret
   };
 };
 

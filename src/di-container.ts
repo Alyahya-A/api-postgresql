@@ -5,8 +5,8 @@ import { CategoryService } from "./services/categoryService";
 import { ProductService } from "./services/productService";
 
 import "./controllers/productController";
-import { StatusRepository } from "./repositories/StatusRepository";
-import { StatusService } from "./services/StatusService";
+import { StatusRepository } from "./repositories/statusRepository";
+import { StatusService } from "./services/statusService";
 
 export const container = new Container({
   defaultScope: "Singleton"
