@@ -1,4 +1,5 @@
 import express from "express";
+import { Guid } from "guid-typescript";
 import { StatusCode } from "../../consts/statusCodes";
 import { logger } from "../../logger/logger";
 import { APIError } from "./apiError";
@@ -7,11 +8,11 @@ import { BaseError } from "./baseError";
 class ErrorHandler {
   public async handleError(
     req: express.Request,
-    traceId: string,
+    traceId: Guid,
     err: Error
   ): Promise<void> {
     var body = {
-      traceId: traceId,
+      traceId: traceId.toString(),
       body: req.body
     };
 

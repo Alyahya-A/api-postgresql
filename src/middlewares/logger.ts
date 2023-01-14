@@ -1,7 +1,7 @@
 import express from "express";
+import { Guid } from "guid-typescript";
 import { StatusCode } from "../consts/statusCodes";
 import { errorHandler } from "../models/errors/errorHandler";
-import { v4 as uuidv4 } from "uuid";
 
 export const loggerMiddleware = async (
   err: Error,
@@ -11,16 +11,18 @@ export const loggerMiddleware = async (
 ) => {
   console.log(`I'm in error middleware`);
 
-  let traceUuid = uuidv4();
+  let traceId = Guid.create();
 
-  await errorHandler.handleError(req, traceUuid, err);
+  await errorHandler.handleError(req, traceId, err);
 
   if (errorHandler.isTrustedError(err)) {
-    res.status(StatusCode.badRequest).json({ ...err, traceId: traceUuid });
+    res
+      .status(StatusCode.badRequest)
+      .json({ ...err, traceId: traceId.toString() });
   } else {
     res.status(StatusCode.internalServer).json({
       title: `Internal server error. Please contact to customer service`,
-      traceId: traceUuid
+      traceId: traceId.toString()
     });
   }
 };

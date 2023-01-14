@@ -1,6 +1,5 @@
 import { StatusCode } from "../../consts/statusCodes";
 import { BaseError } from "./baseError";
-import { v4 as uuidv4 } from "uuid";
 
 export class APIError extends BaseError {
   public readonly errorCode: number;
