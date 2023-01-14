@@ -2,13 +2,14 @@ import winston from "winston";
 import { isDevEnvironment } from "../config/config";
 import { customLevels, formatter } from "./formatter";
 
-class Logger {
+class LoggerService {
   private logger: winston.Logger;
 
   constructor() {
     const prodTransport = new winston.transports.File({
       filename: "logs/error.log",
-      level: "error"
+      level: "error",
+      format: formatter
     });
 
     const transport = new winston.transports.Console({
@@ -18,7 +19,7 @@ class Logger {
     this.logger = winston.createLogger({
       level: isDevEnvironment() ? "trace" : "error",
       levels: customLevels.levels,
-      transports: [isDevEnvironment() ? transport : prodTransport]
+      transports: [isDevEnvironment() ? prodTransport : prodTransport]
     });
 
     winston.addColors(customLevels.colors);
@@ -49,4 +50,4 @@ class Logger {
   }
 }
 
-export const logger = new Logger();
+export const logger = new LoggerService();

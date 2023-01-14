@@ -41,7 +41,7 @@ process.on("unhandledRejection", (reason: Error, promise: Promise<any>) => {
 
 process.on("uncaughtException", (error: Error) => {
   console.log(`I'm in uncaughtException`);
-  errorHandler.handleError(error);
+  // errorHandler.handleError(error);
   if (!errorHandler.isTrustedError(error)) {
     process.exit(1);
   }

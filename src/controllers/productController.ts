@@ -24,7 +24,12 @@ export class ProductController {
     @request() _: express.Request,
     @response() res: express.Response
   ) {
-    throw new APIError("unhaaaaaaaaaaaaaaaaaandel", StatusCode.internalServer);
+    // throw new APIError(
+    //   "unhaaaaaaaaaaaaaaaaaandel",
+    //   4100,
+    //   StatusCode.internalServer
+    // );
+    throw new Error("Heree unhaaaaaaaaaaaaaaaaaandel");
     const allProducts: Product[] = await this._productService.getAllProducts();
 
     if (!allProducts) {

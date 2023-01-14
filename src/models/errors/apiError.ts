@@ -6,8 +6,8 @@ export class APIError extends BaseError {
 
   constructor(
     name: string,
-    httpCode = StatusCode.internalServer,
     errorCode: number,
+    httpCode = StatusCode.internalServer,
     isOperational = true,
     description = "Internal server error"
   ) {

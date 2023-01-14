@@ -2,11 +2,8 @@ import { logger } from "../../logger/logger";
 import { BaseError } from "./baseError";
 
 class ErrorHandler {
-  public async handleError(err: Error): Promise<void> {
-    logger.error(
-      "Error message from the centralized error-handling component",
-      err
-    );
+  public async handleError(traceId: string, err: Error): Promise<void> {
+    logger.error(traceId, err);
   }
 
   public isTrustedError(error: Error) {

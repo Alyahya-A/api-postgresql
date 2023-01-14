@@ -1,7 +1,7 @@
 import { StatusCode } from "../../consts/statusCodes";
 
 export class BaseError extends Error {
-  public readonly name: string;
+  public readonly title: string;
   public readonly httpCode: StatusCode;
   public readonly isOperational: boolean;
 
@@ -14,7 +14,7 @@ export class BaseError extends Error {
     super(description);
     Object.setPrototypeOf(this, new.target.prototype);
 
-    this.name = name;
+    this.title = name;
     this.httpCode = httpCode;
     this.isOperational = isOperational;
 
