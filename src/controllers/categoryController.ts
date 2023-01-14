@@ -13,7 +13,8 @@ import {
 import { StatusCode } from "../consts/statusCodes";
 import { Category } from "../interfaces/category";
 import { errorHandler } from "../models/errors/errorHandler";
-import { NotDataFoundError } from "../models/errors/notDataError";
+import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { NoDataFoundError } from "../models/errors/noDataError";
 import { CategoryService } from "../services/categoryService";
 
 @controller("/categories")
@@ -30,7 +31,7 @@ export class CategoryController {
       await this._categoryService.getAllCategories();
 
     if (allCategories.length == 0) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(allCategories);
@@ -45,7 +46,7 @@ export class CategoryController {
     const category = await this._categoryService.getCategoryById(id);
 
     if (!category) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(category);
@@ -57,7 +58,12 @@ export class CategoryController {
     @requestBody() req: Category,
     @response() res: express.Response
   ) {
-    console.log(req);
+    if (!req.name) {
+      return res
+        .status(StatusCode.badRequest)
+        .json(new InvalidParamError("Invalid category name!", 2000));
+    }
+
     try {
       const created: Category = await this._categoryService.createCategory(req);
       return res.status(StatusCode.created).json(created);

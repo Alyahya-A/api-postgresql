@@ -12,7 +12,8 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import { LkStatus } from "../interfaces/lkStatus";
-import { NotDataFoundError } from "../models/errors/notDataError";
+import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { NoDataFoundError } from "../models/errors/noDataError";
 import { StatusService } from "../services/statusService";
 
 @controller("/status")
@@ -28,7 +29,7 @@ export class StatusController {
     const allStatus: LkStatus[] = await this._statusService.getAllStatus();
 
     if (allStatus.length == 0) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(allStatus);
@@ -43,7 +44,7 @@ export class StatusController {
     const status: LkStatus = await this._statusService.getStstusById(id);
 
     if (!status) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(status);
@@ -55,6 +56,12 @@ export class StatusController {
     @requestBody() req: LkStatus,
     @response() res: express.Response
   ) {
+    if (!req.name) {
+      return res
+        .status(StatusCode.badRequest)
+        .json(new InvalidParamError("Invalid Status name!", 2200));
+    }
+
     const created: LkStatus = await this._statusService.createStaus(req);
     return res.status(StatusCode.created).json(created);
   }

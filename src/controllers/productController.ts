@@ -13,7 +13,8 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import { Product } from "../interfaces/product";
-import { NotDataFoundError } from "../models/errors/notDataError";
+import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { NoDataFoundError } from "../models/errors/noDataError";
 import { ProductService } from "../services/productService";
 
 @controller("/products")
@@ -29,7 +30,7 @@ export class ProductController {
     const allProducts: Product[] = await this._productService.getAllProducts();
 
     if (allProducts.length == 0) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(allProducts);
@@ -44,7 +45,7 @@ export class ProductController {
     const product: Product = await this._productService.getProductById(id);
 
     if (!product) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(product);
@@ -53,6 +54,18 @@ export class ProductController {
   // Create product
   @httpPost("/")
   async create(@requestBody() req: Product, @response() res: express.Response) {
+    if (!req.name) {
+      return res
+        .status(StatusCode.badRequest)
+        .json(new InvalidParamError("Invalid product name!", 2100));
+    }
+
+    if (!req.price || req.price < 0) {
+      return res
+        .status(StatusCode.badRequest)
+        .json(new InvalidParamError("Invalid product price!", 2101));
+    }
+
     const created: Product = await this._productService.createProduct(req);
     return res.status(StatusCode.created).json(created);
   }
@@ -83,7 +96,7 @@ export class ProductController {
     );
 
     if (products?.length == 0) {
-      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(products);
