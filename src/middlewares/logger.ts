@@ -13,10 +13,10 @@ export const loggerMiddleware = async (
 
   let traceUuid = uuidv4();
 
-  await errorHandler.handleError(traceUuid, err);
+  await errorHandler.handleError(req, traceUuid, err);
 
   if (errorHandler.isTrustedError(err)) {
-    res.status(StatusCode.badRequest).json(err);
+    res.status(StatusCode.badRequest).json({ ...err, traceId: traceUuid });
   } else {
     res.status(StatusCode.internalServer).json({
       title: `Internal server error. Please contact to customer service`,

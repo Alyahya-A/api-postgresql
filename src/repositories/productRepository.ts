@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
 import { PoolClient, QueryResult } from "pg";
 import Client from "../database";
-import { BaseRepository } from "../interfaces/baseRepository";
 import { Product } from "../interfaces/product";
+import { IProductRepository } from "../interfaces/repositories/IProductRepository";
 
 @injectable()
-export class ProductRepository implements BaseRepository<Product> {
+export class ProductRepository implements IProductRepository<Product> {
   async index(): Promise<Product[]> {
     let connection: PoolClient | null = null;
 
@@ -64,11 +64,73 @@ export class ProductRepository implements BaseRepository<Product> {
     }
   }
 
-  exists(id: number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async exists(id: number): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      const sql = "SELECT * FROM product where id = $1";
+
+      const { rows } = await connection.query(sql, [id]);
+
+      if (rows.length > 0) return true;
+      else return false;
+    } catch (err) {
+      throw new Error(`Could not get category. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
   }
 
-  delete(id: number): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  async existsByName(name: string): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      const sql = "SELECT * FROM product where name = $1";
+
+      const { rows } = await connection.query(sql, [name]);
+
+      if (rows.length > 0) return true;
+      else return false;
+    } catch (err) {
+      throw new Error(`Could not get category. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async delete(id: number): Promise<Product> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      const sql = "DELETE FROM product WHERE id=$1 RETURNING * ";
+
+      const { rows } = await connection.query(sql, [id]);
+
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not get category. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async getCategoryProducts(categoryId: number): Promise<Product[]> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      const sql = "SELECT * FROM product where category_id=$1";
+
+      const { rows } = await connection.query(sql, [categoryId]);
+
+      return rows;
+    } catch (err) {
+      throw new Error(`Could not get products. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
   }
 }

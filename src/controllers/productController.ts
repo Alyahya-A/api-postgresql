@@ -3,6 +3,7 @@ import express from "express";
 
 import {
   controller,
+  httpDelete,
   httpGet,
   httpPost,
   request,
@@ -11,7 +12,7 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import { Product } from "../interfaces/product";
-import { APIError } from "../models/errors/apiError";
+import { NotDataFoundError } from "../models/errors/notDataError";
 import { ProductService } from "../services/productService";
 
 @controller("/products")
@@ -24,16 +25,10 @@ export class ProductController {
     @request() _: express.Request,
     @response() res: express.Response
   ) {
-    // throw new APIError(
-    //   "unhaaaaaaaaaaaaaaaaaandel",
-    //   4100,
-    //   StatusCode.internalServer
-    // );
-    throw new Error("Heree unhaaaaaaaaaaaaaaaaaandel");
     const allProducts: Product[] = await this._productService.getAllProducts();
 
     if (!allProducts) {
-      return res.status(StatusCode.notFound).json();
+      return res.status(StatusCode.notFound).json(new NotDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(allProducts);
@@ -45,10 +40,10 @@ export class ProductController {
     @requestParam("id") id: number,
     @response() res: express.Response
   ) {
-    const product = await this._productService.getProductById(id);
+    const product: Product = await this._productService.getProductById(id);
 
     if (!product) {
-      return res.status(StatusCode.notFound).json();
+      return res.status(StatusCode.notFound).json(new NotDataFoundError());
     }
 
     return res.status(StatusCode.ok).json(product);
@@ -56,37 +51,43 @@ export class ProductController {
 
   // Create product
   @httpPost("/")
-  async create(@request() req: Product, @response() res: express.Response) {
-    console.log(req);
-    try {
-      const created: Product = await this._productService.createProduct(req);
-      return res.status(StatusCode.created).json(created);
-    } catch (error) {
-      return res.status(StatusCode.badRequest).json(error);
+  async create(
+    @request() req: express.Request,
+    @response() res: express.Response
+  ) {
+    const created: Product = await this._productService.createProduct(req.body);
+    return res.status(StatusCode.created).json(created);
+  }
+
+  // Delete product
+  @httpDelete("/:id")
+  async deleteProduct(
+    @requestParam("id") id: number,
+    @response() res: express.Response
+  ) {
+    const product: Product = await this._productService.deleteProduct(id);
+
+    if (!product) {
+      return res.status(StatusCode.badRequest).json();
     }
+
+    return res.status(StatusCode.ok).json(product);
+  }
+
+  //  Get products by category Id
+  @httpGet("/category/:categoryId")
+  async getCategoryProducts(
+    @requestParam("categoryId") id: number,
+    @response() res: express.Response
+  ) {
+    const products: Product[] = await this._productService.getCategoryProducts(
+      id
+    );
+
+    if (products?.length == 0) {
+      return res.status(StatusCode.notFound).json(new NotDataFoundError());
+    }
+
+    return res.status(StatusCode.ok).json(products);
   }
 }
-
-// // Get product by id
-// // ProductController.get("/:id", async (req: Request, res: Response) => {
-// //   const productId: number = parseInt(req.params.id);
-// //   const productById: ProductType = await product.getProductById(productId);
-// //   return res.json(productById);
-// // });
-// // // Get products by category
-// // ProductController.get("/cat/:category", async (req: Request, res: Response) => {
-// //   const category: string = String(req.params.category);
-// //   const productByCat: ProductType[] = await product.getProductByCat(category);
-// //   return res.json(productByCat);
-// // });
-
-// // // Delete product by id
-// // ProductController.delete(
-// //   "/:id",
-// //   authToken,
-// //   async (req: Request, res: Response) => {
-// //     const id: number = parseInt(req.params.id);
-// //     const deletedOrder = await product.deleteProduct(id);
-// //     return res.json(deletedOrder);
-// //   }
-// // );
