@@ -14,7 +14,6 @@ import {
 import { StatusCode } from "../consts/statusCodes";
 import { TYPES } from "../di-container";
 import { User } from "../interfaces/user";
-import { AuthMiddleware } from "../middlewares/checkAuth";
 import {
   CreateUserReqDto,
   CreateUserResDto
@@ -27,7 +26,7 @@ import { encryptPassword } from "../utils/bcrypt";
 
 @controller("/users", TYPES.AuthMiddleware)
 export class UserController extends BaseHttpController {
-  constructor(private readonly _statusService: UserService) {
+  constructor(private readonly _userService: UserService) {
     super();
   }
 
@@ -37,9 +36,8 @@ export class UserController extends BaseHttpController {
     @request() _: express.Request,
     @response() res: express.Response
   ) {
-    console.log("get all users");
     console.log(`userrr ${this.httpContext.user}`);
-    const allUser: User[] = await this._statusService.getAllUser();
+    const allUser: User[] = await this._userService.getAllUser();
 
     if (allUser.length == 0) {
       return res.status(StatusCode.notFound).json(new NoDataFoundError());
@@ -54,13 +52,13 @@ export class UserController extends BaseHttpController {
     @requestParam("id") id: number,
     @response() res: express.Response
   ) {
-    const user: User = await this._statusService.getUserById(id);
+    const user: User = await this._userService.getUserById(id);
 
     if (!user) {
       return res.status(StatusCode.notFound).json(new NoDataFoundError());
     }
 
-    return res.status(StatusCode.ok).json(status);
+    return res.status(StatusCode.ok).json(user);
   }
 
   // Create user
@@ -107,9 +105,9 @@ export class UserController extends BaseHttpController {
       id: 0
     };
 
-    const created: User = await this._statusService.createUser(user);
+    const created: User = await this._userService.createUser(user);
 
-    const token: string = await this._statusService.generateToken(
+    const token: string = await this._userService.generateToken(
       new TokenReqDto(req.email, req.password)
     );
 
@@ -130,7 +128,7 @@ export class UserController extends BaseHttpController {
     @requestParam("id") id: number,
     @response() res: express.Response
   ) {
-    const user: User = await this._statusService.deleteUser(id);
+    const user: User = await this._userService.deleteUser(id);
 
     if (!user) {
       return res.status(StatusCode.badRequest).json();

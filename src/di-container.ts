@@ -6,11 +6,11 @@ import { ProductService } from "./services/productService";
 
 import express from "express";
 import "./controllers/productController";
+import { AuthMiddleware } from "./middlewares/authMiddleware";
 import { StatusRepository } from "./repositories/statusRepository";
 import { UserRepository } from "./repositories/userRepository";
 import { StatusService } from "./services/statusService";
 import { UserService } from "./services/userService";
-import { AuthMiddleware } from "./middlewares/checkAuth";
 
 export const container = new Container({
   defaultScope: "Singleton"

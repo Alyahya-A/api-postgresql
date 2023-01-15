@@ -1,4 +1,3 @@
-import { injectable, inject } from "inversify";
 import { interfaces } from "inversify-express-utils";
 
 export class Principal<T> implements interfaces.Principal {

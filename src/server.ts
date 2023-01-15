@@ -6,21 +6,19 @@ import { InversifyExpressServer } from "inversify-express-utils";
 import EndpointNotFound404Middleware from "./middlewares/pageNotFound404";
 import requestLoggerMiddleware from "./middlewares/requestLogger";
 
-import express from "express";
-
 import config from "./config/config";
 import { container } from "./di-container";
 import { loggerMiddleware } from "./middlewares/logger";
 
 // Controllers
+import bodyParser from "body-parser";
+import cors from "cors";
 import "./controllers/categoryController";
 import "./controllers/productController";
 import "./controllers/statusController";
-import "./controllers/userController";
 import "./controllers/tokenController";
+import "./controllers/userController";
 import { CustomAuthProvider } from "./providers/customAuthProvider";
-import bodyParser from "body-parser";
-import cors from "cors";
 
 console.clear();
 

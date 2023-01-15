@@ -2,7 +2,6 @@ import express from "express";
 
 import {
   BaseHttpController,
-  Controller,
   controller,
   httpPost,
   requestBody,
