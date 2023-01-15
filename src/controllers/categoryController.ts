@@ -13,7 +13,7 @@ import {
 import { StatusCode } from "../consts/statusCodes";
 import { Category } from "../interfaces/category";
 import { errorHandler } from "../models/errors/errorHandler";
-import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { CategoryService } from "../services/categoryService";
 

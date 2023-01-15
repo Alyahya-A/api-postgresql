@@ -12,7 +12,7 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import { LkStatus } from "../interfaces/lkStatus";
-import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { StatusService } from "../services/statusService";
 

@@ -18,6 +18,7 @@ interface Config {
   PostgresPassword: string | undefined;
   ENV: string | undefined;
   Secret: Secret;
+  SaltRounds: number | undefined;
 }
 
 // Loading process.env as ENV interface
@@ -31,7 +32,10 @@ const getConfig = (): Config => {
     PostgresUser: process.env.POSTGRES_USER,
     PostgresPassword: process.env.POSTGRES_PASSWORD,
     ENV: process.env.ENV,
-    Secret: process.env.TOKEN_KEY as Secret
+    Secret: process.env.JWT_SECRET as Secret,
+    SaltRounds: process.env.SaltRounds
+      ? Number(process.env.SaltRounds)
+      : undefined
   };
 };
 

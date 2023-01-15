@@ -3,6 +3,8 @@ import { PoolClient, QueryResult } from "pg";
 import Client from "../database";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { User } from "../interfaces/user";
+import { TokenReqDto } from "../models/dto/tokenDto";
+import { comparePassword } from "../utils/bcrypt";
 
 @injectable()
 export class UserRepository implements IUserRepository<User> {
@@ -44,15 +46,15 @@ export class UserRepository implements IUserRepository<User> {
     let connection: PoolClient | null = null;
 
     try {
-      const { firstName, lastName, email, password_encrypt } = t;
+      const { firstname, lastname, email, password_encrypt } = t;
 
-      const sql: string = `INSERT INTO users (name) VALUES($1) RETURNING *`;
+      const sql: string = `INSERT INTO users (firstName, lastName, email, password_encrypt) VALUES($1, $2, $3, $4) RETURNING *`;
 
       connection = await Client.connect();
 
       const { rows }: QueryResult = await connection.query(sql, [
-        firstName,
-        lastName,
+        firstname,
+        lastname,
         email,
         password_encrypt
       ]);
@@ -127,6 +129,29 @@ export class UserRepository implements IUserRepository<User> {
 
       if (rows.length > 0) return true;
       else return false;
+    } catch (err) {
+      throw new Error(`Could not get user. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async existsByUser(user: TokenReqDto): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      const { email, password } = user;
+
+      connection = await Client.connect();
+      const sql = "SELECT * FROM users where email = $1 ";
+
+      const { rows } = await connection.query(sql, [email]);
+
+      if (rows.length > 0) {
+        const userDb: User = rows[0];
+
+        return comparePassword(userDb.password_encrypt, user.password);
+      } else return false;
     } catch (err) {
       throw new Error(`Could not get user. Error: ${err}`);
     } finally {

@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+  BaseHttpController,
   controller,
   httpDelete,
   httpGet,
@@ -11,14 +12,24 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import { TYPES } from "../di-container";
 import { User } from "../interfaces/user";
-import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { AuthMiddleware } from "../middlewares/checkAuth";
+import {
+  CreateUserReqDto,
+  CreateUserResDto
+} from "../models/dto/createUserDto";
+import { TokenReqDto } from "../models/dto/tokenDto";
+import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { UserService } from "../services/userService";
+import { encryptPassword } from "../utils/bcrypt";
 
-@controller("/users")
-export class UserController {
-  constructor(private readonly _statusService: UserService) {}
+@controller("/users", TYPES.AuthMiddleware)
+export class UserController extends BaseHttpController {
+  constructor(private readonly _statusService: UserService) {
+    super();
+  }
 
   // Get all users
   @httpGet("/")
@@ -26,6 +37,8 @@ export class UserController {
     @request() _: express.Request,
     @response() res: express.Response
   ) {
+    console.log("get all users");
+    console.log(`userrr ${this.httpContext.user}`);
     const allUser: User[] = await this._statusService.getAllUser();
 
     if (allUser.length == 0) {
@@ -52,7 +65,10 @@ export class UserController {
 
   // Create user
   @httpPost("/")
-  async create(@requestBody() req: User, @response() res: express.Response) {
+  async create(
+    @requestBody() req: CreateUserReqDto,
+    @response() res: express.Response
+  ) {
     if (!req.firstName) {
       return res
         .status(StatusCode.badRequest)
@@ -72,7 +88,7 @@ export class UserController {
         .json(new InvalidParamError("Invalid email!", 2302));
     }
 
-    if (!req.password_encrypt || req.password_encrypt.length < 8) {
+    if (!req.password || req.password.length < 8) {
       return res
         .status(StatusCode.badRequest)
         .json(
@@ -83,8 +99,29 @@ export class UserController {
         );
     }
 
-    const created: User = await this._statusService.createUser(req);
-    return res.status(StatusCode.created).json(created);
+    const user: User = {
+      firstname: req.firstName,
+      lastname: req.lastName,
+      email: req.email,
+      password_encrypt: encryptPassword(req.password),
+      id: 0
+    };
+
+    const created: User = await this._statusService.createUser(user);
+
+    const token: string = await this._statusService.generateToken(
+      new TokenReqDto(req.email, req.password)
+    );
+
+    const userRes: CreateUserResDto = {
+      id: created.id,
+      firstName: created.firstname,
+      lastName: created.lastname,
+      email: created.email,
+      token: token
+    };
+
+    return res.status(StatusCode.created).json(userRes);
   }
 
   // Delete user
@@ -99,6 +136,13 @@ export class UserController {
       return res.status(StatusCode.badRequest).json();
     }
 
-    return res.status(StatusCode.ok).json(status);
+    const userRes = {
+      id: user.id,
+      firstName: user.firstname,
+      lastName: user.lastname,
+      email: user.email
+    };
+
+    return res.status(StatusCode.ok).json(userRes);
   }
 }

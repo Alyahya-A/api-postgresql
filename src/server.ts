@@ -16,17 +16,31 @@ import { loggerMiddleware } from "./middlewares/logger";
 import "./controllers/categoryController";
 import "./controllers/productController";
 import "./controllers/statusController";
+import "./controllers/userController";
+import "./controllers/tokenController";
+import { CustomAuthProvider } from "./providers/customAuthProvider";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 console.clear();
 
-const server = new InversifyExpressServer(container, null, {
-  rootPath: "/api"
-});
+const server = new InversifyExpressServer(
+  container,
+  null,
+  {
+    rootPath: "/api"
+  },
+  null,
+  CustomAuthProvider
+);
 
 server.setConfig((app) => {
   // Add Logs middlewares
   app.use(requestLoggerMiddleware);
-  app.use(express.json());
+
+  app.use(cors({ origin: true }));
+  app.options("*", cors());
+  app.use(bodyParser.json());
 });
 
 const app = server.build();

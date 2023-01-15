@@ -13,7 +13,7 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import { Product } from "../interfaces/product";
-import { InvalidParamError } from "../models/errors/InvalidParamError";
+import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { ProductService } from "../services/productService";
 

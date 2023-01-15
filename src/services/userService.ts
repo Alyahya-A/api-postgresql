@@ -1,8 +1,12 @@
 import { injectable } from "inversify";
+import jwt from "jsonwebtoken";
+import config from "../config/config";
 import { StatusCode } from "../consts/statusCodes";
 import { User } from "../interfaces/user";
+import { TokenReqDto } from "../models/dto/tokenDto";
 import { APIError } from "../models/errors/apiError";
 import { UserRepository } from "../repositories/userRepository";
+import { encryptPassword } from "../utils/bcrypt";
 
 @injectable()
 export class UserService {
@@ -29,6 +33,14 @@ export class UserService {
     return await this._userRepo.getById(id);
   }
 
+  public async getUserByEmail(email: string): Promise<User> {
+    return await this._userRepo.getByEmail(email);
+  }
+
+  public async existsByEmail(email: string): Promise<boolean> {
+    return await this._userRepo.existsByEmail(email);
+  }
+
   public async deleteUser(id: number): Promise<User> {
     if (!(await this._userRepo.exists(id))) {
       throw new APIError(
@@ -40,5 +52,22 @@ export class UserService {
     }
 
     return await this._userRepo.delete(id);
+  }
+
+  public async generateToken(user: TokenReqDto): Promise<string> {
+    if (!(await this._userRepo.existsByUser(user))) {
+      throw new APIError(
+        `Incorrect email or password`,
+        1402,
+        StatusCode.badRequest,
+        true
+      );
+    }
+
+    user.password = encryptPassword(user.password);
+
+    return jwt.sign({ email: user.email, claims: "user" }, config.Secret, {
+      expiresIn: "1d"
+    });
   }
 }

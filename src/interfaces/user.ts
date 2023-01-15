@@ -1,8 +1,8 @@
 import { BaseEntity } from "./baseEntity";
 
 export interface User extends BaseEntity {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
   password_encrypt: string;
 }
