@@ -19,7 +19,7 @@ export class TokenController extends BaseHttpController {
   constructor(
     @inject(TYPES.UserService) private readonly _statusService: UserService
   ) {
-    super();
+    super();  
   }
 
   // Generate token

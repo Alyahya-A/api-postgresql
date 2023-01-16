@@ -21,6 +21,7 @@ export class AuthMiddleware extends BaseMiddleware {
     next: express.NextFunction
   ): Promise<void> {
     console.log(`AuthMiddleware -- START`);
+
     if (!req.headers.authorization) {
       return this.notAuthorized(res);
     }

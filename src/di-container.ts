@@ -27,6 +27,9 @@ import "./controllers/productController";
 import "./controllers/statusController";
 import "./controllers/tokenController";
 import "./controllers/userController";
+import { BaseHttpController } from "inversify-express-utils";
+import { ApplicationContext } from "./config/contexts/applicationContext";
+import { UserContext } from "./config/contexts/userContext";
 
 export const container = new Container({
   defaultScope: "Singleton"
@@ -48,6 +51,12 @@ export const container = new Container({
 
 // Bind Middlewares
 container.bind<AuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
+
+// Bind Contexts
+container.bind<UserContext>(TYPES.UserContext).to(UserContext);
+container
+  .bind<ApplicationContext>(TYPES.ApplicationContext)
+  .to(ApplicationContext);
 
 // Bind Repositoreis
 container

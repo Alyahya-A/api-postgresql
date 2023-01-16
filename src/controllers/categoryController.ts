@@ -2,6 +2,7 @@ import express from "express";
 import { inject } from "inversify";
 
 import {
+  BaseHttpController,
   controller,
   httpDelete,
   httpGet,
@@ -11,6 +12,8 @@ import {
   requestParam,
   response
 } from "inversify-express-utils";
+import { ApplicationContext } from "../config/contexts/applicationContext";
+import { UserContext } from "../config/contexts/userContext";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
 import { Category } from "../interfaces/category";
@@ -18,13 +21,18 @@ import { errorHandler } from "../models/errors/errorHandler";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { CategoryService } from "../services/categoryService";
+import { UserService } from "../services/userService";
 
 @controller("/categories")
-export class CategoryController {
+export class CategoryController extends BaseHttpController {
   constructor(
     @inject(TYPES.CategoryService)
-    private readonly _categoryService: CategoryService
-  ) {}
+    private readonly _categoryService: CategoryService,
+    @inject(TYPES.UserContext)
+    private readonly _userContext: UserContext
+  ) {
+    super();
+  }
 
   // Get all categories
   @httpGet("/")

@@ -1,19 +1,25 @@
 import { interfaces } from "inversify-express-utils";
+import { User } from "../interfaces/user";
 
-export class Principal<T> implements interfaces.Principal {
-  public details: T;
-  public constructor(details: T) {
+export class Principal implements interfaces.Principal {
+  public details: User | undefined;
+
+  public constructor(details?: User) {
     console.log(`Principal ${JSON.stringify(details)}`);
-    this.details = details;
+
+    if (details) this.details = details;
   }
+
   public isAuthenticated(): Promise<boolean> {
     console.log(`isAuthenticated `);
 
     return Promise.resolve(true);
   }
+
   public isResourceOwner(resourceId: unknown): Promise<boolean> {
     return Promise.resolve(resourceId === 1111);
   }
+
   public isInRole(role: string): Promise<boolean> {
     return Promise.resolve(role === "admin");
   }

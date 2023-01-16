@@ -12,6 +12,8 @@ import {
   requestParam,
   response
 } from "inversify-express-utils";
+import { ApplicationContext } from "../config/contexts/applicationContext";
+import { UserContext } from "../config/contexts/userContext";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
 import { User } from "../interfaces/user";
@@ -28,7 +30,11 @@ import { encryptPassword } from "../utils/bcrypt";
 @controller("/users", TYPES.AuthMiddleware)
 export class UserController extends BaseHttpController {
   constructor(
-    @inject(TYPES.UserService) private readonly _userService: UserService
+    @inject(TYPES.UserService) private readonly _userService: UserService,
+    @inject(TYPES.UserContext)
+    private readonly _userContext: UserContext,
+    @inject(TYPES.ApplicationContext)
+    private readonly _appContext: ApplicationContext
   ) {
     super();
   }
@@ -39,7 +45,6 @@ export class UserController extends BaseHttpController {
     @request() _: express.Request,
     @response() res: express.Response
   ) {
-    console.log(`userrr ${this.httpContext.user}`);
     const allUser: User[] = await this._userService.getAllUser();
 
     if (allUser.length == 0) {

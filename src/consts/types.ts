@@ -1,6 +1,9 @@
 const TYPES = {
   AuthMiddleware: Symbol.for("AuthMiddleware"),
 
+  ApplicationContext: Symbol.for("ApplicationContext"),
+  UserContext: Symbol.for("UserContext"),
+
   ProductRepository: Symbol.for("ProductRepository"),
   CategoryRepository: Symbol.for("CategoryRepository"),
   StatusRepository: Symbol.for("StatusRepository"),
