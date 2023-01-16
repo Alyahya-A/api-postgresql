@@ -1,5 +1,6 @@
 // export const productEndpoint: Router = Router();
 import express from "express";
+import { inject } from "inversify";
 
 import {
   controller,
@@ -12,6 +13,7 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { Product } from "../interfaces/product";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
@@ -19,7 +21,10 @@ import { ProductService } from "../services/productService";
 
 @controller("/products")
 export class ProductController {
-  constructor(private readonly _productService: ProductService) {}
+  constructor(
+    @inject(TYPES.ProductService)
+    private readonly _productService: ProductService
+  ) {}
 
   // Get all products
   @httpGet("/")

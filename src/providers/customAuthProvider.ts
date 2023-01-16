@@ -1,13 +1,14 @@
 import express from "express";
 import { inject, injectable } from "inversify";
 import { interfaces } from "inversify-express-utils";
+import TYPES from "../consts/types";
 import { User } from "../interfaces/user";
 import { TokenResDto } from "../models/dto/tokenDto";
 import { UserService } from "../services/userService";
 import { verifyToken } from "../utils/verifyToken";
 import { Principal } from "./principal";
 
-const userService = inject(UserService);
+const userService = inject(TYPES.UserService);
 
 @injectable()
 export class CustomAuthProvider implements interfaces.AuthProvider {

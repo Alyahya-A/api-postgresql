@@ -1,13 +1,21 @@
 import express from "express";
+import { inject, injectable } from "inversify";
+import { BaseMiddleware } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { TokenResDto } from "../models/dto/tokenDto";
 import { UserService } from "../services/userService";
 import { verifyToken } from "../utils/verifyToken";
 
-export class AuthMiddleware {
-  constructor(private readonly _userService: UserService) {}
+@injectable()
+export class AuthMiddleware extends BaseMiddleware {
+  constructor(
+    @inject(TYPES.UserService) private readonly _userService: UserService
+  ) {
+    super();
+  }
 
-  async authenticate(
+  async handler(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction

@@ -1,4 +1,5 @@
 import express from "express";
+import { inject } from "inversify";
 
 import {
   controller,
@@ -11,6 +12,7 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { LkStatus } from "../interfaces/lkStatus";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
@@ -18,7 +20,9 @@ import { StatusService } from "../services/statusService";
 
 @controller("/status")
 export class StatusController {
-  constructor(private readonly _statusService: StatusService) {}
+  constructor(
+    @inject(TYPES.StatusService) private readonly _statusService: StatusService
+  ) {}
 
   // Get all status
   @httpGet("/")

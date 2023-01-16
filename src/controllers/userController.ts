@@ -1,4 +1,5 @@
 import express from "express";
+import { inject } from "inversify";
 
 import {
   BaseHttpController,
@@ -12,7 +13,7 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
-import { TYPES } from "../di-container";
+import TYPES from "../consts/types";
 import { User } from "../interfaces/user";
 import {
   CreateUserReqDto,
@@ -26,7 +27,9 @@ import { encryptPassword } from "../utils/bcrypt";
 
 @controller("/users", TYPES.AuthMiddleware)
 export class UserController extends BaseHttpController {
-  constructor(private readonly _userService: UserService) {
+  constructor(
+    @inject(TYPES.UserService) private readonly _userService: UserService
+  ) {
     super();
   }
 

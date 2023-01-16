@@ -1,12 +1,16 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { LkStatus } from "../interfaces/lkStatus";
 import { APIError } from "../models/errors/apiError";
 import { StatusRepository } from "../repositories/statusRepository";
 
 @injectable()
 export class StatusService {
-  constructor(private readonly _statusRepo: StatusRepository) {}
+  constructor(
+    @inject(TYPES.StatusRepository)
+    private readonly _statusRepo: StatusRepository
+  ) {}
 
   public getAllStatus = async (): Promise<LkStatus[]> => {
     return await this._statusRepo.index();

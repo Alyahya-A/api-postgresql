@@ -10,17 +10,12 @@ import config from "./config/config";
 import { container } from "./di-container";
 import { loggerMiddleware } from "./middlewares/logger";
 
-// Controllers
 import bodyParser from "body-parser";
 import cors from "cors";
-import "./controllers/categoryController";
-import "./controllers/productController";
-import "./controllers/statusController";
-import "./controllers/tokenController";
-import "./controllers/userController";
+
 import { CustomAuthProvider } from "./providers/customAuthProvider";
 
-console.clear();
+// console.clear();
 
 const server = new InversifyExpressServer(
   container,

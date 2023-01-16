@@ -1,4 +1,5 @@
 import express from "express";
+import { inject } from "inversify";
 
 import {
   BaseHttpController,
@@ -8,13 +9,16 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { TokenReqDto } from "../models/dto/tokenDto";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { UserService } from "../services/userService";
 
 @controller("/token")
 export class TokenController extends BaseHttpController {
-  constructor(private readonly _statusService: UserService) {
+  constructor(
+    @inject(TYPES.UserService) private readonly _statusService: UserService
+  ) {
     super();
   }
 

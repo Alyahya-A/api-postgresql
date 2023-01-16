@@ -1,4 +1,5 @@
 import express from "express";
+import { inject } from "inversify";
 
 import {
   controller,
@@ -11,6 +12,7 @@ import {
   response
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { Category } from "../interfaces/category";
 import { errorHandler } from "../models/errors/errorHandler";
 import { InvalidParamError } from "../models/errors/invalidParamError";
@@ -19,7 +21,10 @@ import { CategoryService } from "../services/categoryService";
 
 @controller("/categories")
 export class CategoryController {
-  constructor(private readonly _categoryService: CategoryService) {}
+  constructor(
+    @inject(TYPES.CategoryService)
+    private readonly _categoryService: CategoryService
+  ) {}
 
   // Get all categories
   @httpGet("/")

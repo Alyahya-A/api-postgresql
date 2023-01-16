@@ -1,7 +1,8 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import jwt from "jsonwebtoken";
 import config from "../config/config";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { User } from "../interfaces/user";
 import { TokenReqDto } from "../models/dto/tokenDto";
 import { APIError } from "../models/errors/apiError";
@@ -10,7 +11,9 @@ import { encryptPassword } from "../utils/bcrypt";
 
 @injectable()
 export class UserService {
-  constructor(private readonly _userRepo: UserRepository) {}
+  constructor(
+    @inject(TYPES.UserRepository) private readonly _userRepo: UserRepository
+  ) {}
 
   public getAllUser = async (): Promise<User[]> => {
     return await this._userRepo.index();

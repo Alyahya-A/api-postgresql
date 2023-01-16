@@ -1,12 +1,16 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { Category } from "../interfaces/category";
 import { APIError } from "../models/errors/apiError";
 import { CategoryRepository } from "../repositories/categoryRepository";
 
 @injectable()
 export class CategoryService {
-  constructor(private readonly _categoryRepo: CategoryRepository) {}
+  constructor(
+    @inject(TYPES.CategoryRepository)
+    private readonly _categoryRepo: CategoryRepository
+  ) {}
 
   public getAllCategories = async (): Promise<Category[]> => {
     return await this._categoryRepo.index();

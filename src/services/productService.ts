@@ -1,5 +1,6 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import { StatusCode } from "../consts/statusCodes";
+import TYPES from "../consts/types";
 import { Product } from "../interfaces/product";
 import { APIError } from "../models/errors/apiError";
 import { ProductRepository } from "../repositories/productRepository";
@@ -8,7 +9,9 @@ import { CategoryService } from "./categoryService";
 @injectable()
 export class ProductService {
   constructor(
+    @inject(TYPES.ProductRepository)
     private readonly _productRepo: ProductRepository,
+    @inject(TYPES.CategoryService)
     private readonly _categoryService: CategoryService
   ) {}
 
