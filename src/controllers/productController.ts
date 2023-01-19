@@ -57,7 +57,7 @@ export class ProductController {
   }
 
   // Create product
-  @httpPost("/")
+  @httpPost("/", TYPES.AuthMiddleware)
   async create(@requestBody() req: Product, @response() res: express.Response) {
     if (!req.name) {
       return res
