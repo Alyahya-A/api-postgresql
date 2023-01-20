@@ -5,14 +5,10 @@ export class Principal implements interfaces.Principal {
   public details: User | undefined;
 
   public constructor(details?: User) {
-    console.log(`Principal ${JSON.stringify(details)}`);
-
     if (details) this.details = details;
   }
 
   public isAuthenticated(): Promise<boolean> {
-    console.log(`isAuthenticated `);
-
     return Promise.resolve(true);
   }
 

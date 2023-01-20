@@ -20,8 +20,6 @@ export class AuthMiddleware extends BaseMiddleware {
     res: express.Response,
     next: express.NextFunction
   ): Promise<void> {
-    console.log(`AuthMiddleware -- START`);
-
     if (!req.headers.authorization) {
       return this.notAuthorized(res);
     }
@@ -41,8 +39,6 @@ export class AuthMiddleware extends BaseMiddleware {
     if (!token) {
       return this.notAuthorized(res);
     }
-
-    console.log(`AuthMiddleware token: ${token}`);
 
     try {
       const user: TokenResDto = verifyToken(token);

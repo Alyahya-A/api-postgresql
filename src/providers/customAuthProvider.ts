@@ -22,8 +22,6 @@ export class CustomAuthProvider implements interfaces.AuthProvider {
     res: express.Response,
     next: express.NextFunction
   ): Promise<interfaces.Principal> {
-    console.log("CustomAuthProvider");
-
     const token = req.headers.authorization?.replace("Bearer ", "");
 
     if (token) {

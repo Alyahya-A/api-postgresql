@@ -45,22 +45,25 @@ export class OrderRepository implements IOrderRepository<Order> {
           orderIndex++;
         }
 
-        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
-        if (
-          prevOrderId === order.orderid &&
-          prevProdcutId === order.productid
-        ) {
-          orders[orderIndex].products[productIndex - 1].quantity +=
-            order.quantity;
-        } else {
-          orders[orderIndex].products.push({
-            id: order.itemid,
-            order_id: order.orderid,
-            product_id: order.productid,
-            quantity: order.quantity
-          });
+        // to avoid returning 1 index of empty object in orders.products, if there is no items we must return empty list
+        if (order.itemid > 0) {
+          // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+          if (
+            prevOrderId === order.orderid &&
+            prevProdcutId === order.productid
+          ) {
+            orders[orderIndex].products[productIndex - 1].quantity +=
+              order.quantity;
+          } else {
+            orders[orderIndex].products.push({
+              id: order.itemid,
+              order_id: order.orderid,
+              product_id: order.productid,
+              quantity: order.quantity
+            });
 
-          productIndex++;
+            productIndex++;
+          }
         }
 
         prevOrderId = order.orderid;
@@ -114,18 +117,21 @@ export class OrderRepository implements IOrderRepository<Order> {
           firstRecord = false;
         }
 
-        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
-        if (prevProdcutId === item.productid) {
-          order.products[productIndex - 1].quantity += item.quantity;
-        } else {
-          order.products.push({
-            id: item.itemid,
-            order_id: item.orderid,
-            product_id: item.productid,
-            quantity: item.quantity
-          });
+        // to avoid returning 1 index of empty object in orders.products, if there is no items we must return empty list
+        if (item.itemid > 0) {
+          // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+          if (prevProdcutId === item.productid) {
+            order.products[productIndex - 1].quantity += item.quantity;
+          } else {
+            order.products.push({
+              id: item.itemid,
+              order_id: item.orderid,
+              product_id: item.productid,
+              quantity: item.quantity
+            });
 
-          productIndex++;
+            productIndex++;
+          }
         }
 
         prevProdcutId = item.productid;
@@ -315,22 +321,25 @@ export class OrderRepository implements IOrderRepository<Order> {
           orderIndex++;
         }
 
-        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
-        if (
-          prevOrderId === order.orderid &&
-          prevProdcutId === order.productid
-        ) {
-          orders[orderIndex].products[productIndex - 1].quantity +=
-            order.quantity;
-        } else {
-          orders[orderIndex].products.push({
-            id: order.itemid,
-            order_id: order.orderid,
-            product_id: order.productid,
-            quantity: order.quantity
-          });
+        // to avoid returning 1 index of empty object in orders.products, if there is no items we must return empty list
+        if (order.itemid > 0) {
+          // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+          if (
+            prevOrderId === order.orderid &&
+            prevProdcutId === order.productid
+          ) {
+            orders[orderIndex].products[productIndex - 1].quantity +=
+              order.quantity;
+          } else {
+            orders[orderIndex].products.push({
+              id: order.itemid,
+              order_id: order.orderid,
+              product_id: order.productid,
+              quantity: order.quantity
+            });
 
-          productIndex++;
+            productIndex++;
+          }
         }
 
         prevOrderId = order.orderid;
