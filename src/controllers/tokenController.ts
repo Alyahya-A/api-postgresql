@@ -1,6 +1,5 @@
 import express from "express";
 import { inject } from "inversify";
-
 import {
   BaseHttpController,
   controller,
@@ -19,7 +18,7 @@ export class TokenController extends BaseHttpController {
   constructor(
     @inject(TYPES.UserService) private readonly _statusService: UserService
   ) {
-    super();  
+    super();
   }
 
   // Generate token

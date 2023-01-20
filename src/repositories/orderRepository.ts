@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { PoolClient, QueryResult } from "pg";
 import Client from "../database";
-import { Order, OrderItem } from "../interfaces/order";
+import { Order } from "../interfaces/order";
 import { IOrderRepository } from "../interfaces/repositories/IOrderRepository";
 import { TokenReqDto } from "../models/dto/tokenDto";
 import { comparePassword } from "../utils/bcrypt";

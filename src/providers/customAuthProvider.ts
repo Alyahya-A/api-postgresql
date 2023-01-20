@@ -1,9 +1,9 @@
 import express from "express";
 import { inject, injectable } from "inversify";
 import { interfaces } from "inversify-express-utils";
-import { ApplicationContext } from "../config/contexts/applicationContext";
-import { UserContext } from "../config/contexts/userContext";
 import TYPES from "../consts/types";
+import { ApplicationContext } from "../contexts/applicationContext";
+import { UserContext } from "../contexts/userContext";
 import { container } from "../di-container";
 import { TokenResDto } from "../models/dto/tokenDto";
 import { UserService } from "../services/userService";

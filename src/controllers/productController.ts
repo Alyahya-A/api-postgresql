@@ -1,7 +1,6 @@
 // export const productEndpoint: Router = Router();
 import express from "express";
 import { inject } from "inversify";
-
 import {
   controller,
   httpDelete,

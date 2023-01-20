@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import { User } from "../../interfaces/user";
 
 @injectable()
 export class ApplicationContext {

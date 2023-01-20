@@ -1,6 +1,5 @@
 import express from "express";
 import { inject } from "inversify";
-
 import {
   BaseHttpController,
   controller,
@@ -12,10 +11,10 @@ import {
   requestParam,
   response
 } from "inversify-express-utils";
-import { ApplicationContext } from "../config/contexts/applicationContext";
-import { UserContext } from "../config/contexts/userContext";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
+import { ApplicationContext } from "../contexts/applicationContext";
+import { UserContext } from "../contexts/userContext";
 import { User } from "../interfaces/user";
 import {
   CreateUserReqDto,

@@ -2,17 +2,14 @@
 //also it should be imported only once, so that a singleton is created.
 import "reflect-metadata";
 
+import bodyParser from "body-parser";
+import cors from "cors";
 import { InversifyExpressServer } from "inversify-express-utils";
-import EndpointNotFound404Middleware from "./middlewares/pageNotFound404";
-import requestLoggerMiddleware from "./middlewares/requestLogger";
-
 import config from "./config/config";
 import { container } from "./di-container";
 import { loggerMiddleware } from "./middlewares/logger";
-
-import bodyParser from "body-parser";
-import cors from "cors";
-
+import EndpointNotFound404Middleware from "./middlewares/pageNotFound404";
+import requestLoggerMiddleware from "./middlewares/requestLogger";
 import { CustomAuthProvider } from "./providers/customAuthProvider";
 
 // console.clear();
