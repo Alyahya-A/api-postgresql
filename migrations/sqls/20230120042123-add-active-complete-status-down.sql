@@ -1,0 +1,1 @@
+DELETE FROM lk_status WHERE name = 'Active' or name = 'Completed';

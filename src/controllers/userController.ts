@@ -26,7 +26,7 @@ import { NoDataFoundError } from "../models/errors/noDataError";
 import { UserService } from "../services/userService";
 import { encryptPassword } from "../utils/bcrypt";
 
-@controller("/users", TYPES.AuthMiddleware)
+@controller("/users")
 export class UserController extends BaseHttpController {
   constructor(
     @inject(TYPES.UserService) private readonly _userService: UserService,
@@ -39,7 +39,7 @@ export class UserController extends BaseHttpController {
   }
 
   // Get all users
-  @httpGet("/")
+  @httpGet("/", TYPES.AuthMiddleware)
   async index(
     @request() _: express.Request,
     @response() res: express.Response
@@ -54,7 +54,7 @@ export class UserController extends BaseHttpController {
   }
 
   //  Get user by id
-  @httpGet("/:id")
+  @httpGet("/:id", TYPES.AuthMiddleware)
   async getProductById(
     @requestParam("id") id: number,
     @response() res: express.Response
@@ -130,12 +130,34 @@ export class UserController extends BaseHttpController {
   }
 
   // Delete user
-  @httpDelete("/:id")
+  @httpDelete("/:id", TYPES.AuthMiddleware)
   async deleteProduct(
     @requestParam("id") id: number,
     @response() res: express.Response
   ) {
     const user: User = await this._userService.deleteUser(id);
+
+    if (!user) {
+      return res.status(StatusCode.badRequest).json();
+    }
+
+    const userRes = {
+      id: user.id,
+      firstName: user.firstname,
+      lastName: user.lastname,
+      email: user.email
+    };
+
+    return res.status(StatusCode.ok).json(userRes);
+  }
+
+  // Delete user
+  @httpPost("/:order_id", TYPES.AuthMiddleware)
+  async completeOrder(
+    @requestParam("order_id") order_id: number,
+    @response() res: express.Response
+  ) {
+    const user: User = await this._userService.deleteUser(order_id);
 
     if (!user) {
       return res.status(StatusCode.badRequest).json();

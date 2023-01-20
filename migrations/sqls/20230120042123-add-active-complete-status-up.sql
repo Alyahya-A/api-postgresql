@@ -1,0 +1,1 @@
+INSERT INTO lk_status(name)	VALUES ('Active'), ('Completed');

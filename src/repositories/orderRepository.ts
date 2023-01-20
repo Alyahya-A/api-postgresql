@@ -1,10 +1,8 @@
 import { injectable } from "inversify";
 import { PoolClient, QueryResult } from "pg";
 import Client from "../database";
-import { Order } from "../interfaces/order";
+import { Order, OrderItem } from "../interfaces/order";
 import { IOrderRepository } from "../interfaces/repositories/IOrderRepository";
-import { TokenReqDto } from "../models/dto/tokenDto";
-import { comparePassword } from "../utils/bcrypt";
 
 @injectable()
 export class OrderRepository implements IOrderRepository<Order> {
@@ -13,13 +11,65 @@ export class OrderRepository implements IOrderRepository<Order> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM orders JOIN order_item on id = order_id";
+      let sql =
+        " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
+      sql += " FROM orders o ";
+      sql += " LEFT JOIN order_item i on o.id = i.order_id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " order by i.order_id, i.product_id ";
 
       const { rows } = await connection.query(sql);
 
-      return rows;
+      const orders: Order[] = [];
+
+      let prevOrderId = 0;
+      let prevProdcutId = 0;
+
+      let orderIndex = -1;
+      let productIndex = -1;
+
+      // The output will be:
+      // [{"orderid":1,"userid":1,"productid":1,"quantity":1,"statusdesc":"Active","itemid":2}]
+
+      for (const order of rows) {
+        // New order
+        if (prevOrderId !== order.orderid) {
+          orders.push({
+            id: order.orderid,
+            status: order.statusdesc,
+            user_id: order.userid,
+            products: []
+          });
+
+          productIndex = 0;
+          orderIndex++;
+        }
+
+        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+        if (
+          prevOrderId === order.orderid &&
+          prevProdcutId === order.productid
+        ) {
+          orders[orderIndex].products[productIndex - 1].quantity +=
+            order.quantity;
+        } else {
+          orders[orderIndex].products.push({
+            id: order.itemid,
+            order_id: order.orderid,
+            product_id: order.productid,
+            quantity: order.quantity
+          });
+
+          productIndex++;
+        }
+
+        prevOrderId = order.orderid;
+        prevProdcutId = order.productid;
+      }
+
+      return orders;
     } catch (err) {
-      throw new Error(`Could not get users. Error: ${err}`);
+      throw new Error(`Could not get order with all products. Error: ${err}`);
     } finally {
       connection?.release();
     }
@@ -29,39 +79,267 @@ export class OrderRepository implements IOrderRepository<Order> {
     let connection: PoolClient | null = null;
 
     try {
-      const sql: string = `SELECT * FROM orders JOIN order_item on id = order_id WHERE id = $1`;
+      let sql =
+        " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
+      sql += " FROM orders o ";
+      sql += " LEFT JOIN order_item i on o.id = i.order_id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " WHERE o.id = $1 ";
+      sql += " order by i.product_id ";
 
       connection = await Client.connect();
 
       const { rows }: QueryResult = await connection.query(sql, [id]);
 
-      return rows[0];
+      let order!: Order;
+
+      let prevProdcutId = 0;
+
+      let firstRecord = true;
+      let productIndex = 0;
+
+      // The output will be:
+      // [{"orderid":1,"userid":1,"productid":1,"quantity":1,"statusdesc":"Active","itemid":2}]
+
+      for (const item of rows) {
+        // New order
+        if (firstRecord) {
+          order = {
+            id: item.orderid,
+            status: item.statusdesc,
+            user_id: item.userid,
+            products: []
+          };
+
+          firstRecord = false;
+        }
+
+        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+        if (prevProdcutId === item.productid) {
+          order.products[productIndex - 1].quantity += item.quantity;
+        } else {
+          order.products.push({
+            id: item.itemid,
+            order_id: item.orderid,
+            product_id: item.productid,
+            quantity: item.quantity
+          });
+
+          productIndex++;
+        }
+
+        prevProdcutId = item.productid;
+      }
+
+      return order;
     } catch (err) {
-      throw new Error(`Could not get user by id. Error: ${err}`);
+      throw new Error(`Could not get order by id. Error: ${err}`);
     } finally {
       connection?.release();
     }
   }
-  async create(t: Order): Promise<Order> {
+
+  async getOrderItem(orderId: number, productId: number): Promise<OrderItem> {
     let connection: PoolClient | null = null;
 
     try {
-      const { firstname, lastname, email, password_encrypt } = t;
-
-      const sql: string = `INSERT INTO users (firstName, lastName, email, password_encrypt) VALUES($1, $2, $3, $4) RETURNING *`;
+      const sql: string = `SELECT * FROM order_item WHERE order_id = $1 and product_id = $2`;
 
       connection = await Client.connect();
 
       const { rows }: QueryResult = await connection.query(sql, [
-        firstname,
-        lastname,
-        email,
-        password_encrypt
+        orderId,
+        productId
       ]);
 
       return rows[0];
     } catch (err) {
-      throw new Error(`Could not create user. Error: ${err}`);
+      throw new Error(`Could not get order by id. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async create(order: Order): Promise<Order> {
+    let connection: PoolClient | null = null;
+
+    try {
+      const { user_id } = order;
+
+      const sql =
+        "INSERT INTO orders (user_id, status_id) VALUES($1, $2) RETURNING *";
+
+      connection = await Client.connect();
+
+      const { rows }: QueryResult = await connection.query(sql, [user_id, 1]);
+
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not create order. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async addItem(item: OrderItem): Promise<OrderItem> {
+    let connection: PoolClient | null = null;
+
+    try {
+      const { product_id, order_id, quantity } = item;
+
+      connection = await Client.connect();
+
+      const sql =
+        "INSERT INTO order_item (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *";
+
+      const { rows }: QueryResult = await connection.query(sql, [
+        order_id,
+        product_id,
+        quantity
+      ]);
+
+      return rows[0];
+    } catch (err) {
+      throw new Error(`Could not add item to order. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async isOrderActive(orderId: number): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+
+      const ordersql = "SELECT * FROM orders WHERE id=$1 ";
+
+      const result = await connection.query(ordersql, [orderId]);
+
+      const order = result.rows[0];
+
+      // not active
+      if (order && order.status_id === 1) {
+        return true;
+      }
+
+      return false;
+    } catch (err) {
+      throw new Error(`Could check if order active. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async isUserHasActiveOrder(userId: number): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+
+      const ordersql =
+        "SELECT * FROM orders WHERE user_id= $1 and status_id = 1";
+
+      const { rowCount } = await connection.query(ordersql, [userId]);
+
+      // has active order
+      if (rowCount > 0) {
+        return true;
+      }
+
+      return false;
+    } catch (err) {
+      throw new Error(`Could check user has active order. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async completeOrderByOrderId(orderId: number): Promise<Order> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+
+      const ordersql =
+        "UPDATE orders set status_id = 2 WHERE id = $1 RETURNING *";
+
+      const { rows } = await connection.query(ordersql, [orderId]);
+
+      return await this.getById(rows[0].id);
+    } catch (err) {
+      throw new Error(`Could complete the order. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async completedOrdersByUserId(userId: number): Promise<Order[]> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+
+      let sql =
+        " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
+      sql += " FROM orders o ";
+      sql += " LEFT JOIN order_item i on o.id = i.order_id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " WHERE o.user_id = $1 and o.status_id = 2 ";
+      sql += " order by i.order_id, i.product_id ";
+
+      const { rows } = await connection.query(sql, [userId]);
+
+      const orders: Order[] = [];
+
+      let prevOrderId = 0;
+      let prevProdcutId = 0;
+
+      let orderIndex = -1;
+      let productIndex = -1;
+
+      // The output will be:
+      // [{"orderid":1,"userid":1,"productid":1,"quantity":1,"statusdesc":"Active","itemid":2}]
+
+      for (const order of rows) {
+        // New order
+        if (prevOrderId !== order.orderid) {
+          orders.push({
+            id: order.orderid,
+            status: order.statusdesc,
+            user_id: order.userid,
+            products: []
+          });
+
+          productIndex = 0;
+          orderIndex++;
+        }
+
+        // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+        if (
+          prevOrderId === order.orderid &&
+          prevProdcutId === order.productid
+        ) {
+          orders[orderIndex].products[productIndex - 1].quantity +=
+            order.quantity;
+        } else {
+          orders[orderIndex].products.push({
+            id: order.itemid,
+            order_id: order.orderid,
+            product_id: order.productid,
+            quantity: order.quantity
+          });
+
+          productIndex++;
+        }
+
+        prevOrderId = order.orderid;
+        prevProdcutId = order.productid;
+      }
+
+      return orders;
+    } catch (err) {
+      throw new Error(`Could get completed orders by userId. Error: ${err}`);
     } finally {
       connection?.release();
     }
@@ -72,14 +350,14 @@ export class OrderRepository implements IOrderRepository<Order> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM users where id = $1";
+      const sql = "SELECT * FROM orders where id = $1";
 
       const { rows } = await connection.query(sql, [id]);
 
       if (rows.length > 0) return true;
       else return false;
     } catch (err) {
-      throw new Error(`Could not get user. Error: ${err}`);
+      throw new Error(`Could not get order. Error: ${err}`);
     } finally {
       connection?.release();
     }
@@ -90,70 +368,13 @@ export class OrderRepository implements IOrderRepository<Order> {
 
     try {
       connection = await Client.connect();
-      const sql = "DELETE FROM users WHERE id=$1 RETURNING * ";
+      const sql = "DELETE FROM orders WHERE id=$1 RETURNING * ";
 
       const { rows } = await connection.query(sql, [id]);
 
       return rows[0];
     } catch (err) {
-      throw new Error(`Could not delete user. Error: ${err}`);
-    } finally {
-      connection?.release();
-    }
-  }
-
-  async getByEmail(email: string): Promise<Order> {
-    let connection: PoolClient | null = null;
-
-    try {
-      connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1";
-
-      const { rows } = await connection.query(sql, [email]);
-
-      return rows[0];
-    } catch (err) {
-      throw new Error(`Could not get user. Error: ${err}`);
-    } finally {
-      connection?.release();
-    }
-  }
-  async existsByEmail(email: string): Promise<boolean> {
-    let connection: PoolClient | null = null;
-
-    try {
-      connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1";
-
-      const { rows } = await connection.query(sql, [email]);
-
-      if (rows.length > 0) return true;
-      else return false;
-    } catch (err) {
-      throw new Error(`Could not get user. Error: ${err}`);
-    } finally {
-      connection?.release();
-    }
-  }
-
-  async existsByOrder(user: TokenReqDto): Promise<boolean> {
-    let connection: PoolClient | null = null;
-
-    try {
-      const { email, password } = user;
-
-      connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1 ";
-
-      const { rows } = await connection.query(sql, [email]);
-
-      if (rows.length > 0) {
-        const userDb: Order = rows[0];
-
-        return comparePassword(userDb.password_encrypt, user.password);
-      } else return false;
-    } catch (err) {
-      throw new Error(`Could not get user. Error: ${err}`);
+      throw new Error(`Could not delete order. Error: ${err}`);
     } finally {
       connection?.release();
     }

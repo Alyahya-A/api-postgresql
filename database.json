@@ -4,14 +4,14 @@
         "host": "localhost",
         "database": "storefront_backend_dev",
         "user": "postgres",
-        "password": "Aa123456"
+        "password": "Aa@123456"
     },
     "test": {
         "driver": "pg",
         "host": "localhost",
         "database": "storefront_backend_test",
         "user": "postgres",
-        "password": "Aa123456"
+        "password": "Aa@123456"
     },
     "sql-file": true
 }

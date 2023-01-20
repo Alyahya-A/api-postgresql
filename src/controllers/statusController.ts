@@ -54,7 +54,7 @@ export class StatusController {
   }
 
   // Create status
-  @httpPost("/")
+  @httpPost("/", TYPES.AuthMiddleware)
   async create(
     @requestBody() req: LkStatus,
     @response() res: express.Response
@@ -70,7 +70,7 @@ export class StatusController {
   }
 
   // Delete status
-  @httpDelete("/:id")
+  @httpDelete("/:id", TYPES.AuthMiddleware)
   async deleteProduct(
     @requestParam("id") id: number,
     @response() res: express.Response

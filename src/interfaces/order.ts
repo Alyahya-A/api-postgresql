@@ -1,13 +1,13 @@
 import { BaseEntity } from "./baseEntity";
-import { LkStatus } from "./lkStatus";
 
 export interface Order extends BaseEntity {
   products: OrderItem[];
   user_id: number;
-  status: LkStatus;
+  status: string;
 }
 
 export interface OrderItem extends BaseEntity {
+  order_id: number;
   product_id: number;
   quantity: number;
 }

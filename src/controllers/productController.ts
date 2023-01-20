@@ -75,7 +75,7 @@ export class ProductController {
   }
 
   // Delete product
-  @httpDelete("/:id")
+  @httpDelete("/:id", TYPES.AuthMiddleware)
   async deleteProduct(
     @requestParam("id") id: number,
     @response() res: express.Response
@@ -87,22 +87,5 @@ export class ProductController {
     }
 
     return res.status(StatusCode.ok).json(product);
-  }
-
-  //  Get products by category Id
-  @httpGet("/category/:categoryId")
-  async getCategoryProducts(
-    @requestParam("categoryId") id: number,
-    @response() res: express.Response
-  ) {
-    const products: Product[] = await this._productService.getCategoryProducts(
-      id
-    );
-
-    if (products?.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
-    }
-
-    return res.status(StatusCode.ok).json(products);
   }
 }

@@ -9,6 +9,10 @@ export class UserContext {
     this.user = user;
   }
 
+  public getId(): number {
+    return this.user?.id;
+  }
+
   public getEmail(): string {
     return this.user?.email;
   }

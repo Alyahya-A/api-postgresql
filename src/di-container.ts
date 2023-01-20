@@ -22,10 +22,15 @@ import { StatusService } from "./services/statusService";
 import { UserService } from "./services/userService";
 // Controllers are required to imported one unique time
 import "./controllers/categoryController";
+import "./controllers/orderController";
 import "./controllers/productController";
 import "./controllers/statusController";
 import "./controllers/tokenController";
 import "./controllers/userController";
+import { Order } from "./interfaces/order";
+import { IOrderRepository } from "./interfaces/repositories/IOrderRepository";
+import { OrderRepository } from "./repositories/orderRepository";
+import { OrderService } from "./services/orderService";
 
 export const container = new Container({
   defaultScope: "Singleton"
@@ -69,11 +74,16 @@ container
 
 container.bind<IUserRepository<User>>(TYPES.UserRepository).to(UserRepository);
 
+container
+  .bind<IOrderRepository<Order>>(TYPES.OrderRepository)
+  .to(OrderRepository);
+
 // Bind Services
 container.bind<ProductService>(TYPES.ProductService).to(ProductService);
 container.bind<CategoryService>(TYPES.CategoryService).to(CategoryService);
 container.bind<StatusService>(TYPES.StatusService).to(StatusService);
 container.bind<UserService>(TYPES.UserService).to(UserService);
+container.bind<OrderService>(TYPES.OrderService).to(OrderService);
 
 //////////////////////////////////////////////////
 ////////// Dependency Injection |  END  //////////

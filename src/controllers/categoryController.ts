@@ -13,20 +13,21 @@ import {
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
-import { UserContext } from "../contexts/userContext";
 import { Category } from "../interfaces/category";
+import { Product } from "../interfaces/product";
 import { errorHandler } from "../models/errors/errorHandler";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { CategoryService } from "../services/categoryService";
+import { ProductService } from "../services/productService";
 
 @controller("/categories")
 export class CategoryController extends BaseHttpController {
   constructor(
     @inject(TYPES.CategoryService)
     private readonly _categoryService: CategoryService,
-    @inject(TYPES.UserContext)
-    private readonly _userContext: UserContext
+    @inject(TYPES.ProductService)
+    private readonly _productService: ProductService
   ) {
     super();
   }
@@ -63,7 +64,7 @@ export class CategoryController extends BaseHttpController {
   }
 
   // Create category
-  @httpPost("/")
+  @httpPost("/", TYPES.AuthMiddleware)
   async create(
     @requestBody() req: Category,
     @response() res: express.Response
@@ -83,7 +84,7 @@ export class CategoryController extends BaseHttpController {
   }
 
   // Delete category
-  @httpDelete("/:id")
+  @httpDelete("/:id", TYPES.AuthMiddleware)
   async deleteCategory(
     @requestParam("id") id: number,
     @response() res: express.Response
@@ -95,5 +96,22 @@ export class CategoryController extends BaseHttpController {
     }
 
     return res.status(StatusCode.ok).json(category);
+  }
+
+  //  Get products by category Id
+  @httpGet("/:categoryId/products")
+  async getCategoryProducts(
+    @requestParam("categoryId") id: number,
+    @response() res: express.Response
+  ) {
+    const products: Product[] = await this._productService.getCategoryProducts(
+      id
+    );
+
+    if (products?.length == 0) {
+      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+    }
+
+    return res.status(StatusCode.ok).json(products);
   }
 }
