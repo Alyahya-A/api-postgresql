@@ -40,16 +40,6 @@ export const container = new Container({
 ////////// Dependency Injection | START //////////
 //////////////////////////////////////////////////
 
-// container
-//   .bind<express.RequestHandler>(TYPES.AuthMiddleware)
-//   .toConstantValue((req: any, res: any, next: any) =>
-//     new AuthMiddleware(container.get<UserService>(UserService)).authenticate(
-//       req,
-//       res,
-//       next
-//     )
-//   );
-
 // Bind Middlewares
 container.bind<AuthMiddleware>(TYPES.AuthMiddleware).to(AuthMiddleware);
 
