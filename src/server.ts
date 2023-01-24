@@ -41,7 +41,12 @@ app.use(loggerMiddleware);
 // Add page not found middleware
 app.use(EndpointNotFound404Middleware);
 
+// const routeInfo = getRouteInfo(container);
+// console.log(JSON.stringify({ routes: routeInfo }, null, 4));
+
 // Run the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+export default app;

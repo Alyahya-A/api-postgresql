@@ -9,9 +9,9 @@ export const loggerMiddleware = async (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  console.log(`I'm in error middleware`);
-
   let traceId = Guid.create();
+
+  req.headers["x-trace-id"] = traceId.toString();
 
   await errorHandler.handleError(req, traceId, err);
 

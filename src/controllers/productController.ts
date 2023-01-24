@@ -1,15 +1,13 @@
 // export const productEndpoint: Router = Router();
-import express from "express";
 import { inject } from "inversify";
 import {
+  BaseHttpController,
   controller,
   httpDelete,
   httpGet,
   httpPost,
-  request,
   requestBody,
-  requestParam,
-  response
+  requestParam
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
@@ -19,73 +17,65 @@ import { NoDataFoundError } from "../models/errors/noDataError";
 import { ProductService } from "../services/productService";
 
 @controller("/products")
-export class ProductController {
+export class ProductController extends BaseHttpController {
   constructor(
     @inject(TYPES.ProductService)
     private readonly _productService: ProductService
-  ) {}
+  ) {
+    super();
+  }
 
   // Get all products
   @httpGet("/")
-  async index(
-    @request() _: express.Request,
-    @response() res: express.Response
-  ) {
+  async index() {
     const allProducts: Product[] = await this._productService.getAllProducts();
 
     if (allProducts.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(allProducts);
+    return this.json(allProducts, StatusCode.ok);
   }
 
   //  Get product by id
   @httpGet("/:id")
-  async getProductById(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async getProductById(@requestParam("id") id: number) {
     const product: Product = await this._productService.getProductById(id);
 
     if (!product) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(product);
+    return this.json(product, StatusCode.ok);
   }
 
   // Create product
   @httpPost("/", TYPES.AuthMiddleware)
-  async create(@requestBody() req: Product, @response() res: express.Response) {
+  async create(@requestBody() req: Product) {
     if (!req.name) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(new InvalidParamError("Invalid product name!", 2100));
+      return this.json(
+        new InvalidParamError("Invalid product name!", 2100),
+        StatusCode.badRequest
+      );
     }
 
     if (!req.price || req.price < 0) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(new InvalidParamError("Invalid product price!", 2101));
+      return this.json(
+        new InvalidParamError("Invalid product price!", 2101),
+        StatusCode.badRequest
+      );
     }
 
     const created: Product = await this._productService.createProduct(req);
-    return res.status(StatusCode.created).json(created);
+
+    return this.json(created, StatusCode.created);
   }
 
   // Delete product
   @httpDelete("/:id", TYPES.AuthMiddleware)
-  async deleteProduct(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async deleteProduct(@requestParam("id") id: number) {
     const product: Product = await this._productService.deleteProduct(id);
 
-    if (!product) {
-      return res.status(StatusCode.badRequest).json();
-    }
-
-    return res.status(StatusCode.ok).json(product);
+    return this.json(product, StatusCode.ok);
   }
 }

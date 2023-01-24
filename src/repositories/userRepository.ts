@@ -4,7 +4,7 @@ import Client from "../database";
 import { IUserRepository } from "../interfaces/repositories/IUserRepository";
 import { User } from "../interfaces/user";
 import { TokenReqDto } from "../models/dto/tokenDto";
-import { comparePassword } from "../utils/bcrypt";
+import { comparePassword, encryptPassword } from "../utils/bcrypt";
 
 @injectable()
 export class UserRepository implements IUserRepository<User> {
@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository<User> {
         firstname,
         lastname,
         email,
-        password_encrypt
+        encryptPassword(password_encrypt)
       ]);
 
       return rows[0];

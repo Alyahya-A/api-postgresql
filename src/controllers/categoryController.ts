@@ -1,4 +1,3 @@
-import express from "express";
 import { inject } from "inversify";
 import {
   BaseHttpController,
@@ -6,16 +5,13 @@ import {
   httpDelete,
   httpGet,
   httpPost,
-  request,
   requestBody,
-  requestParam,
-  response
+  requestParam
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
 import { Category } from "../interfaces/category";
 import { Product } from "../interfaces/product";
-import { errorHandler } from "../models/errors/errorHandler";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { CategoryService } from "../services/categoryService";
@@ -34,84 +30,63 @@ export class CategoryController extends BaseHttpController {
 
   // Get all categories
   @httpGet("/")
-  async index(
-    @request() _: express.Request,
-    @response() res: express.Response
-  ) {
+  async index() {
     const allCategories: Category[] =
       await this._categoryService.getAllCategories();
 
     if (allCategories.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(allCategories);
+    return this.json(allCategories, StatusCode.ok);
   }
 
   //  Get category by id
   @httpGet("/:id")
-  async getCategoryById(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async getCategoryById(@requestParam("id") id: number) {
     const category = await this._categoryService.getCategoryById(id);
 
     if (!category) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(category);
+    return this.json(category, StatusCode.ok);
   }
 
   // Create category
   @httpPost("/", TYPES.AuthMiddleware)
-  async create(
-    @requestBody() req: Category,
-    @response() res: express.Response
-  ) {
+  async create(@requestBody() req: Category) {
     if (!req.name) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(new InvalidParamError("Invalid category name!", 2000));
+      return this.json(
+        new InvalidParamError("Invalid category name!", 2000),
+        StatusCode.badRequest
+      );
     }
 
-    try {
-      const created: Category = await this._categoryService.createCategory(req);
-      return res.status(StatusCode.created).json(created);
-    } catch (error) {
-      errorHandler.throw(res, error);
-    }
+    const created: Category = await this._categoryService.createCategory(req);
+
+    return this.json(created, StatusCode.created);
   }
 
   // Delete category
   @httpDelete("/:id", TYPES.AuthMiddleware)
-  async deleteCategory(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async deleteCategory(@requestParam("id") id: number) {
     const category = await this._categoryService.deleteCategory(id);
 
-    if (!category) {
-      return res.status(StatusCode.badRequest).json();
-    }
-
-    return res.status(StatusCode.ok).json(category);
+    return this.json(category, StatusCode.ok);
   }
 
   //  Get products by category Id
   @httpGet("/:categoryId/products")
-  async getCategoryProducts(
-    @requestParam("categoryId") id: number,
-    @response() res: express.Response
-  ) {
+  async getCategoryProducts(@requestParam("categoryId") id: number) {
     const products: Product[] = await this._productService.getCategoryProducts(
       id
     );
 
     if (products?.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(products);
+    return this.json(products, StatusCode.ok);
   }
 }

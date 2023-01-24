@@ -1,14 +1,12 @@
-import express from "express";
 import { inject } from "inversify";
 import {
+  BaseHttpController,
   controller,
   httpDelete,
   httpGet,
   httpPost,
-  request,
   requestBody,
-  requestParam,
-  response
+  requestParam
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
@@ -18,69 +16,57 @@ import { NoDataFoundError } from "../models/errors/noDataError";
 import { StatusService } from "../services/statusService";
 
 @controller("/status")
-export class StatusController {
+export class StatusController extends BaseHttpController {
   constructor(
     @inject(TYPES.StatusService) private readonly _statusService: StatusService
-  ) {}
+  ) {
+    super();
+  }
 
   // Get all status
   @httpGet("/")
-  async index(
-    @request() _: express.Request,
-    @response() res: express.Response
-  ) {
+  async index() {
     const allStatus: LkStatus[] = await this._statusService.getAllStatus();
 
     if (allStatus.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(allStatus);
+    return this.json(allStatus, StatusCode.ok);
   }
 
   //  Get status by id
   @httpGet("/:id")
-  async getProductById(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async getProductById(@requestParam("id") id: number) {
     const status: LkStatus = await this._statusService.getStstusById(id);
 
     if (!status) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(status);
+    return this.json(status, StatusCode.ok);
   }
 
   // Create status
   @httpPost("/", TYPES.AuthMiddleware)
-  async create(
-    @requestBody() req: LkStatus,
-    @response() res: express.Response
-  ) {
+  async create(@requestBody() req: LkStatus) {
     if (!req.name) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(new InvalidParamError("Invalid Status name!", 2200));
+      return this.json(
+        new InvalidParamError("Invalid Status name!", 2200),
+        StatusCode.badRequest
+      );
     }
 
     const created: LkStatus = await this._statusService.createStaus(req);
-    return res.status(StatusCode.created).json(created);
+
+    return this.json(created, StatusCode.created);
   }
 
   // Delete status
   @httpDelete("/:id", TYPES.AuthMiddleware)
-  async deleteProduct(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async deleteProduct(@requestParam("id") id: number) {
     const status: LkStatus = await this._statusService.deleteStatus(id);
 
-    if (!status) {
-      return res.status(StatusCode.badRequest).json();
-    }
-
-    return res.status(StatusCode.ok).json(status);
+    return this.json(status, StatusCode.ok);
   }
 }

@@ -22,11 +22,16 @@ import { StatusService } from "./services/statusService";
 import { UserService } from "./services/userService";
 // Controllers are required to imported one unique time
 import "./controllers/categoryController";
+import { CategoryController } from "./controllers/categoryController";
 import "./controllers/orderController";
+import { OrderController } from "./controllers/orderController";
 import "./controllers/productController";
+import { ProductController } from "./controllers/productController";
 import "./controllers/statusController";
+import { StatusController } from "./controllers/statusController";
 import "./controllers/tokenController";
 import "./controllers/userController";
+import { UserController } from "./controllers/userController";
 import { Order } from "./interfaces/order";
 import { IOrderRepository } from "./interfaces/repositories/IOrderRepository";
 import { OrderRepository } from "./repositories/orderRepository";
@@ -48,6 +53,17 @@ container.bind<UserContext>(TYPES.UserContext).to(UserContext);
 container
   .bind<ApplicationContext>(TYPES.ApplicationContext)
   .to(ApplicationContext);
+
+// Bind Controller
+container
+  .bind<ProductController>(TYPES.ProductController)
+  .to(ProductController);
+container
+  .bind<CategoryController>(TYPES.CategoryController)
+  .to(CategoryController);
+container.bind<StatusController>(TYPES.StatusController).to(StatusController);
+container.bind<UserController>(TYPES.UserController).to(UserController);
+container.bind<OrderController>(TYPES.OrderController).to(OrderController);
 
 // Bind Repositoreis
 container

@@ -1,11 +1,9 @@
-import express from "express";
 import { inject } from "inversify";
 import {
   BaseHttpController,
   controller,
   httpPost,
-  requestBody,
-  response
+  requestBody
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
@@ -23,26 +21,23 @@ export class TokenController extends BaseHttpController {
 
   // Generate token
   @httpPost("/")
-  async generateToken(
-    @requestBody() req: TokenReqDto,
-    @response() res: express.Response
-  ) {
+  async generateToken(@requestBody() req: TokenReqDto) {
     const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     if (!req.email || expression.test(req.email)) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(new InvalidParamError("Invalid email!", 2302));
+      return this.json(
+        new InvalidParamError("Invalid email!", 2302),
+        StatusCode.badRequest
+      );
     }
     this.httpContext;
     if (!req.password || req.password.length < 8) {
-      return res
-        .status(StatusCode.badRequest)
-        .json(
-          new InvalidParamError(
-            "Invalid password!. Password length must be 8 or more",
-            2303
-          )
-        );
+      return this.json(
+        new InvalidParamError(
+          "Invalid password!. Password length must be 8 or more",
+          2303
+        ),
+        StatusCode.badRequest
+      );
     }
 
     const token: string = await this._statusService.generateToken(req);

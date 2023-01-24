@@ -76,7 +76,7 @@ export class ProductRepository implements IProductRepository<Product> {
       if (rows.length > 0) return true;
       else return false;
     } catch (err) {
-      throw new Error(`Could not get category. Error: ${err}`);
+      throw new Error(`Could not get product. Error: ${err}`);
     } finally {
       connection?.release();
     }
@@ -94,7 +94,7 @@ export class ProductRepository implements IProductRepository<Product> {
       if (rows.length > 0) return true;
       else return false;
     } catch (err) {
-      throw new Error(`Could not get category. Error: ${err}`);
+      throw new Error(`Could not get product. Error: ${err}`);
     } finally {
       connection?.release();
     }
@@ -102,16 +102,17 @@ export class ProductRepository implements IProductRepository<Product> {
 
   async delete(id: number): Promise<Product> {
     let connection: PoolClient | null = null;
-
+    console.log(1);
     try {
       connection = await Client.connect();
       const sql = "DELETE FROM product WHERE id=$1 RETURNING * ";
 
       const { rows } = await connection.query(sql, [id]);
+      console.log(1);
 
       return rows[0];
     } catch (err) {
-      throw new Error(`Could not get category. Error: ${err}`);
+      throw new Error(`Could not get product. Error: ${err}`);
     } finally {
       connection?.release();
     }

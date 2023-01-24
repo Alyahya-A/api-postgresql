@@ -1,16 +1,14 @@
 // export const orderEndpoint: Router = Router();
-import express from "express";
 import { inject } from "inversify";
 import {
+  BaseHttpController,
   controller,
   httpDelete,
   httpGet,
   httpPost,
   httpPut,
-  request,
   requestBody,
-  requestParam,
-  response
+  requestParam
 } from "inversify-express-utils";
 import { StatusCode } from "../consts/statusCodes";
 import TYPES from "../consts/types";
@@ -21,101 +19,103 @@ import { NoDataFoundError } from "../models/errors/noDataError";
 import { OrderService } from "../services/orderService";
 
 @controller("/orders", TYPES.AuthMiddleware)
-export class OrderController {
+export class OrderController extends BaseHttpController {
   constructor(
     @inject(TYPES.OrderService)
     private readonly _orderService: OrderService,
     @inject(TYPES.UserContext)
     private readonly _userContext: UserContext
-  ) {}
+  ) {
+    super();
+  }
 
   // Get all orders
   @httpGet("/")
-  async index(
-    @request() _: express.Request,
-    @response() res: express.Response
-  ) {
+  async index() {
     const allOrders: Order[] = await this._orderService.getAllOrders();
 
     if (allOrders.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(allOrders);
+    return this.json(allOrders, StatusCode.ok);
   }
 
   // Completed order by user
   @httpGet("/completed")
-  async completedOrderByUser(@response() res: express.Response) {
+  async completedOrderByUser() {
     const orders: Order[] = await this._orderService.completedOrders(
       this._userContext.getId()
     );
 
     if (!orders || orders.length == 0) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(orders);
+    return this.json(orders, StatusCode.ok);
+  }
+
+  // Completed order by user
+  @httpGet("/active")
+  async getActiveOrder() {
+    console.log(`userId: ${this._userContext.getId()}`);
+
+    const order: Order | null = await this._orderService.getActiveOrder(
+      this._userContext.getId()
+    );
+
+    if (!order) {
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
+    }
+
+    return this.json(order, StatusCode.ok);
   }
 
   //  Get order by id
   @httpGet("/:id")
-  async getOrderById(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async getOrderById(@requestParam("id") id: number) {
     const order: Order = await this._orderService.getOrderById(id);
 
     if (!order) {
-      return res.status(StatusCode.notFound).json(new NoDataFoundError());
+      return this.json(new NoDataFoundError(), StatusCode.notFound);
     }
 
-    return res.status(StatusCode.ok).json(order);
+    return this.json(order, StatusCode.ok);
   }
 
   // Create order
   @httpPost("/")
-  async create(@response() res: express.Response) {
+  async create() {
     const created: Order = await this._orderService.createOrder(
       this._userContext.getId()
     );
-    return res.status(StatusCode.created).json(created);
+
+    return this.json(created, StatusCode.created);
   }
 
   // Delete order
   @httpDelete("/:id")
-  async deleteOrder(
-    @requestParam("id") id: number,
-    @response() res: express.Response
-  ) {
+  async deleteOrder(@requestParam("id") id: number) {
     const order: Order = await this._orderService.deleteOrder(id);
 
-    if (!order) {
-      return res.status(StatusCode.badRequest).json();
-    }
-
-    return res.status(StatusCode.ok).json(order);
+    return this.json(order, StatusCode.ok);
   }
 
   // Add item/product to active order
   @httpPost("/:orderId/products")
   async addItemToOrder(
     @requestParam("orderId") orderId: number,
-    @requestBody() req: OrderItem,
-    @response() res: express.Response
+    @requestBody() req: OrderItem
   ) {
     req.order_id = orderId;
     const orderItem: OrderItem = await this._orderService.addItemToOrder(req);
 
-    return res.status(StatusCode.ok).json(orderItem);
+    return this.json(orderItem, StatusCode.ok);
   }
 
   // Complete order
   @httpPut("/:orderId/complete")
-  async completeOrder(
-    @requestParam("orderId") orderId: number,
-    @response() res: express.Response
-  ) {
+  async completeOrder(@requestParam("orderId") orderId: number) {
     const order: Order = await this._orderService.completeOrder(orderId);
 
     if (!order) {
@@ -127,6 +127,6 @@ export class OrderController {
       );
     }
 
-    return res.status(StatusCode.ok).json(order);
+    return this.json(order, StatusCode.ok);
   }
 }

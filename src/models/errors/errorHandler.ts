@@ -2,7 +2,6 @@ import express from "express";
 import { Guid } from "guid-typescript";
 import { StatusCode } from "../../consts/statusCodes";
 import { logger } from "../../logger/logger";
-import { APIError } from "./apiError";
 import { BaseError } from "./baseError";
 
 class ErrorHandler {
@@ -28,16 +27,6 @@ class ErrorHandler {
     }
     return false;
   }
-
-  public throw(res: express.Response, error: unknown) {
-    if (
-      error instanceof APIError &&
-      error.httpCode !== StatusCode.internalServer
-    ) {
-      return res.status(StatusCode.badRequest).json(error);
-    }
-
-    return res.status(StatusCode.internalServer).json(error);
-  }
 }
+
 export const errorHandler = new ErrorHandler();

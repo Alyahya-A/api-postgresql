@@ -7,7 +7,6 @@ import { User } from "../interfaces/user";
 import { TokenReqDto } from "../models/dto/tokenDto";
 import { APIError } from "../models/errors/apiError";
 import { UserRepository } from "../repositories/userRepository";
-import { encryptPassword } from "../utils/bcrypt";
 
 @injectable()
 export class UserService {
@@ -22,7 +21,7 @@ export class UserService {
   public async createUser(body: User): Promise<User> {
     if (await this._userRepo.existsByEmail(body.email)) {
       throw new APIError(
-        `Email \"${body.email}\" is already exists`,
+        `${body.email} email is already exists`,
         1400,
         StatusCode.badRequest,
         true
@@ -66,8 +65,6 @@ export class UserService {
         true
       );
     }
-
-    user.password = encryptPassword(user.password);
 
     return jwt.sign({ email: user.email, claims: "user" }, config.Secret, {
       expiresIn: "1d"

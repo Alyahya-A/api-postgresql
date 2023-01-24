@@ -237,7 +237,7 @@ export class OrderRepository implements IOrderRepository<Order> {
     }
   }
 
-  async isUserHasActiveOrder(userId: number): Promise<boolean> {
+  async getActiveOrder(userId: number): Promise<Order | null> {
     let connection: PoolClient | null = null;
 
     try {
@@ -246,14 +246,14 @@ export class OrderRepository implements IOrderRepository<Order> {
       const ordersql =
         "SELECT * FROM orders WHERE user_id= $1 and status_id = 1";
 
-      const { rowCount } = await connection.query(ordersql, [userId]);
+      const { rowCount, rows } = await connection.query(ordersql, [userId]);
 
       // has active order
       if (rowCount > 0) {
-        return true;
+        return this.getById(rows[0].id);
       }
 
-      return false;
+      return null;
     } catch (err) {
       throw new Error(`Could check user has active order. Error: ${err}`);
     } finally {

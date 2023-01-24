@@ -19,8 +19,14 @@ export class OrderService {
     return await this._orderRepo.index();
   };
 
+  public async getActiveOrder(userId: number): Promise<Order | null> {
+    return await this._orderRepo.getActiveOrder(userId);
+  }
+
   public async createOrder(userId: number): Promise<Order> {
-    if (await this._orderRepo.isUserHasActiveOrder(userId)) {
+    const order: Order | null = await this._orderRepo.getActiveOrder(userId);
+
+    if (order != null) {
       throw new APIError(
         "Could not create order since user has an active order",
         1000,

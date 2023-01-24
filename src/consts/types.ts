@@ -4,6 +4,12 @@ const TYPES = {
   ApplicationContext: Symbol.for("ApplicationContext"),
   UserContext: Symbol.for("UserContext"),
 
+  ProductController: Symbol.for("ProductController"),
+  CategoryController: Symbol.for("CategoryController"),
+  StatusController: Symbol.for("StatusController"),
+  UserController: Symbol.for("UserController"),
+  OrderController: Symbol.for("OrderController"),
+
   ProductRepository: Symbol.for("ProductRepository"),
   CategoryRepository: Symbol.for("CategoryRepository"),
   StatusRepository: Symbol.for("StatusRepository"),
