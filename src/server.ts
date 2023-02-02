@@ -1,12 +1,13 @@
-//reflect-metadata should be imported before any interface or other imports
-//also it should be imported only once, so that a singleton is created.
-import "reflect-metadata";
+// container should be imported before any interface or other imports
+// so to to make sure reflect-metadata is first import
+// "reflect-metadata"; must be in di-container.ts to make it accessable for testing
+import { container } from "./di-container";
 
+// d
 import bodyParser from "body-parser";
 import cors from "cors";
 import { InversifyExpressServer } from "inversify-express-utils";
 import config from "./config/config";
-import { container } from "./di-container";
 import { loggerMiddleware } from "./middlewares/logger";
 import EndpointNotFound404Middleware from "./middlewares/pageNotFound404";
 import requestLoggerMiddleware from "./middlewares/requestLogger";

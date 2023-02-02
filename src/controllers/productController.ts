@@ -54,14 +54,14 @@ export class ProductController extends BaseHttpController {
   async create(@requestBody() req: Product) {
     if (!req.name) {
       return this.json(
-        new InvalidParamError("Invalid product name!", 2100),
+        new InvalidParamError("Invalid product name!", 3000),
         StatusCode.badRequest
       );
     }
 
-    if (!req.price || req.price < 0) {
+    if (!req.price || Number.parseFloat(req.price) < 0) {
       return this.json(
-        new InvalidParamError("Invalid product price!", 2101),
+        new InvalidParamError("Invalid product price!", 3001),
         StatusCode.badRequest
       );
     }

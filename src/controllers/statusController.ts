@@ -52,7 +52,7 @@ export class StatusController extends BaseHttpController {
   async create(@requestBody() req: LkStatus) {
     if (!req.name) {
       return this.json(
-        new InvalidParamError("Invalid Status name!", 2200),
+        new InvalidParamError("Invalid Status name!", 4000),
         StatusCode.badRequest
       );
     }

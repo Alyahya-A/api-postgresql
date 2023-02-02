@@ -29,25 +29,32 @@ export class OrderService {
     if (order != null) {
       throw new APIError(
         "Could not create order since user has an active order",
-        1000,
+        2200,
         StatusCode.badRequest,
         true
       );
     }
 
-    return await this._orderRepo.create({
+    const createdOrder: Order = await this._orderRepo.create({
       user_id: userId,
       id: 0,
       products: [],
       status: ""
     });
+
+    return {
+      id: createdOrder.id,
+      user_id: createdOrder.user_id,
+      products: [],
+      status: "Active"
+    };
   }
 
   public async addItemToOrder(order: OrderItem): Promise<OrderItem> {
     if (!(await this._orderRepo.exists(order.order_id))) {
       throw new APIError(
         `Order \"${order.order_id}\" not found`,
-        1200,
+        2201,
         StatusCode.badRequest,
         true
       );
@@ -56,7 +63,7 @@ export class OrderService {
     if (!(await this._productRepo.exists(order.product_id))) {
       throw new APIError(
         `Product \"${order.product_id}\" not found`,
-        1200,
+        2202,
         StatusCode.badRequest,
         true
       );
@@ -65,7 +72,7 @@ export class OrderService {
     if (order.quantity < 1) {
       throw new APIError(
         `Invalid quantity. Must be more than zero!`,
-        1200,
+        2203,
         StatusCode.badRequest,
         true
       );
@@ -74,7 +81,7 @@ export class OrderService {
     if (!(await this._orderRepo.isOrderActive(order.order_id))) {
       throw new APIError(
         `Could not add product ${order.product_id} to order ${order.order_id} because order in not active`,
-        1000,
+        2204,
         StatusCode.badRequest,
         true
       );
@@ -95,7 +102,7 @@ export class OrderService {
     if (!(await this._orderRepo.exists(id))) {
       throw new APIError(
         `Order \"${id}\" is not exists`,
-        1201,
+        2205,
         StatusCode.badRequest,
         true
       );
@@ -108,7 +115,7 @@ export class OrderService {
     if (!(await this._orderRepo.exists(orderId))) {
       throw new APIError(
         `Order \"${orderId}\" not found`,
-        1200,
+        2206,
         StatusCode.badRequest,
         true
       );
@@ -117,7 +124,7 @@ export class OrderService {
     if (!(await this._orderRepo.isOrderActive(orderId))) {
       throw new APIError(
         `Order must be active to complete it`,
-        1000,
+        2207,
         StatusCode.badRequest,
         true
       );

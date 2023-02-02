@@ -20,7 +20,7 @@ export class StatusService {
     if (await this._statusRepo.existsByName(body.name)) {
       throw new APIError(
         `Staus \"${body.name}\" is already exists`,
-        1300,
+        4200,
         StatusCode.badRequest,
         true
       );
@@ -37,7 +37,7 @@ export class StatusService {
     if (!(await this._statusRepo.exists(id))) {
       throw new APIError(
         `Status \"${id}\" is not exists`,
-        1301,
+        4201,
         StatusCode.badRequest,
         true
       );

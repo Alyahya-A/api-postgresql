@@ -58,7 +58,7 @@ export class CategoryController extends BaseHttpController {
   async create(@requestBody() req: Category) {
     if (!req.name) {
       return this.json(
-        new InvalidParamError("Invalid category name!", 2000),
+        new InvalidParamError("Invalid category name!", 1000),
         StatusCode.badRequest
       );
     }

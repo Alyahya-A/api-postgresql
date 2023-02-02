@@ -77,21 +77,21 @@ export class UserController extends BaseHttpController {
   async create(@requestBody() req: CreateUserReqDto) {
     if (!req.firstName) {
       return this.json(
-        new InvalidParamError("Invalid first name!", 2300),
+        new InvalidParamError("Invalid first name!", 5000),
         StatusCode.badRequest
       );
     }
 
     if (!req.lastName) {
       return this.json(
-        new InvalidParamError("Invalid first name!", 2300),
+        new InvalidParamError("Invalid last name!", 5001),
         StatusCode.badRequest
       );
     }
 
     if (!emailValidator(req.email)) {
       return this.json(
-        new InvalidParamError("Invalid email address", 2302),
+        new InvalidParamError("Invalid email address!", 5002),
         StatusCode.badRequest
       );
     }
@@ -100,7 +100,7 @@ export class UserController extends BaseHttpController {
       return this.json(
         new InvalidParamError(
           "Invalid password!. Password length must be 8 or more, have uppercase letters and have lowercase letters",
-          2303
+          5003
         ),
         StatusCode.badRequest
       );
@@ -121,7 +121,7 @@ export class UserController extends BaseHttpController {
     );
 
     const userRes: CreateUserResDto = {
-      id: created.id,
+      id: created.id!,
       firstName: created.firstname,
       lastName: created.lastname,
       email: created.email,

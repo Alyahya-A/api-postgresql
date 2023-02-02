@@ -10,7 +10,7 @@ export class UserContext {
   }
 
   public getId(): number {
-    return this.user?.id;
+    return this.user.id!;
   }
 
   public getEmail(): string {

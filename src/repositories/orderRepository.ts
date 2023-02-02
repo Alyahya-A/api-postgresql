@@ -15,7 +15,7 @@ export class OrderRepository implements IOrderRepository<Order> {
         " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
       sql += " FROM orders o ";
       sql += " LEFT JOIN order_item i on o.id = i.order_id ";
-      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.code ";
       sql += " order by i.order_id, i.product_id ";
 
       const { rows } = await connection.query(sql);
@@ -86,7 +86,7 @@ export class OrderRepository implements IOrderRepository<Order> {
         " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
       sql += " FROM orders o ";
       sql += " LEFT JOIN order_item i on o.id = i.order_id ";
-      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.code ";
       sql += " WHERE o.id = $1 ";
       sql += " order by i.product_id ";
 
@@ -177,6 +177,7 @@ export class OrderRepository implements IOrderRepository<Order> {
 
       connection = await Client.connect();
 
+      // status_id 1 = Active
       const { rows }: QueryResult = await connection.query(sql, [user_id, 1]);
 
       return rows[0];
@@ -290,7 +291,7 @@ export class OrderRepository implements IOrderRepository<Order> {
         " SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ";
       sql += " FROM orders o ";
       sql += " LEFT JOIN order_item i on o.id = i.order_id ";
-      sql += " LEFT JOIN lk_status s on o.status_id = s.id ";
+      sql += " LEFT JOIN lk_status s on o.status_id = s.code ";
       sql += " WHERE o.user_id = $1 and o.status_id = 2 ";
       sql += " order by i.order_id, i.product_id ";
 

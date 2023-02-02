@@ -22,7 +22,7 @@ export class UserService {
     if (await this._userRepo.existsByEmail(body.email)) {
       throw new APIError(
         `${body.email} email is already exists`,
-        1400,
+        5200,
         StatusCode.badRequest,
         true
       );
@@ -47,7 +47,7 @@ export class UserService {
     if (!(await this._userRepo.exists(id))) {
       throw new APIError(
         `User \"${id}\" is not exists`,
-        1401,
+        5201,
         StatusCode.badRequest,
         true
       );
@@ -60,7 +60,7 @@ export class UserService {
     if (!(await this._userRepo.existsByUser(user))) {
       throw new APIError(
         `Incorrect email or password`,
-        1402,
+        5202,
         StatusCode.badRequest,
         true
       );

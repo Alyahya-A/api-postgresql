@@ -2,9 +2,6 @@ import bcrypt from "bcrypt";
 import config from "../config/config";
 
 export const encryptPassword = (password: string): string => {
-  console.log(`password ${password}`);
-  console.log(`SaltRounds ${config.SaltRounds}`);
-
   return bcrypt.hashSync(password, config.SaltRounds!);
 };
 

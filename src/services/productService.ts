@@ -23,7 +23,7 @@ export class ProductService {
     if (!(await this._categoryService.existsById(body.category_id))) {
       throw new APIError(
         `Category \"${body.category_id}\" not found. Please add the category first`,
-        1000,
+        3200,
         StatusCode.badRequest,
         true
       );
@@ -32,7 +32,7 @@ export class ProductService {
     if (await this._productRepo.existsByName(body.name)) {
       throw new APIError(
         `Product \"${body.name}\" is already exists`,
-        1001,
+        3201,
         StatusCode.badRequest,
         true
       );
@@ -49,7 +49,7 @@ export class ProductService {
     if (!(await this._productRepo.exists(id))) {
       throw new APIError(
         `Product \"${id}\" is not exists`,
-        1002,
+        3202,
         StatusCode.badRequest,
         true
       );
@@ -62,7 +62,7 @@ export class ProductService {
     if (!(await this._categoryService.existsById(categoryId))) {
       throw new APIError(
         `Invalid category Id: ${categoryId}`,
-        1003,
+        3203,
         StatusCode.badRequest,
         true
       );
