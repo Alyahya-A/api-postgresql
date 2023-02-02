@@ -1,1 +1,5 @@
-INSERT INTO lk_status(name)	VALUES ('Active'), ('Completed');
+INSERT INTO
+    lk_status(code, name)
+VALUES
+    (1, 'Active'),
+    (2, 'Completed');
