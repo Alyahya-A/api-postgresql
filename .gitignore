@@ -1,5 +1,7 @@
 .vscode/
 
+database.json
+
 # Logs
 logs
 *.log
