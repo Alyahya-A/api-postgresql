@@ -39,20 +39,22 @@ Migrations files can be found under [migrations](./migrations).
     "host": "localhost",
     "database": "storefront_backend_dev",
     "user": "postgres",
-    "password": "Aa@123456"
+    "password": "<USER_PASSWORD>"
   },
   "test": {
     "driver": "pg",
     "host": "localhost",
     "database": "storefront_backend_test",
     "user": "postgres",
-    "password": "Aa@123456"
+    "password": "<USER_PASSWORD>"
   },
   "sql-file": true
 }
 ```
 
-To run our `migrations` we need to install `db-migrate` globally by the following command:
+**_For demonstration and testing purposes only_**
+
+To run the `migrations` we need to install `db-migrate` globally by the following command:
 
 ```bash
 npm install -g db-migrate
@@ -91,7 +93,7 @@ POSTGRES_HOST=localhost
 POSTGRES_DB=storefront_backend_dev
 POSTGRES_TEST_DB=storefront_backend_test
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=Aa@123456
+POSTGRES_PASSWORD=<USER_PASSWORD>
 ENV=dev
 PORT=3000
 JWT_SECRET=97D17B58182C4EE9E113E74ABF9E572680D0D898525F2208D7DD191EBFDBF326
@@ -130,11 +132,11 @@ Now the app is ready to run locally, by bellow command:
 ### Endpoint Access
 
 All endpoints are defined in [routeInfo](routeInfo.json) file provided by `inversify-express-utils`.  
-Also, a `Postman Collections` added contains all endpoind. [postman_collection](storefront_backend.postman_collection.json)
+Also, a `Postman Collections` added contains all endpoinds. [postman_collection](storefront_backend.postman_collection.json)
 
 ### Token and Authentication
 
-Tokens are passed along with the http header as
+The client passes the authentication information to the server in an `Authorization` header
 
 ```
 Authorization   Bearer <token>
