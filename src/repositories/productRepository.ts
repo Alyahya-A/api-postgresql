@@ -1,8 +1,8 @@
-import { injectable } from "inversify";
-import { PoolClient, QueryResult } from "pg";
-import Client from "../database";
-import { Product } from "../interfaces/product";
-import { IProductRepository } from "../interfaces/repositories/IProductRepository";
+import { injectable } from 'inversify';
+import { PoolClient, QueryResult } from 'pg';
+import Client from '../database';
+import { Product } from '../interfaces/product';
+import { IProductRepository } from '../interfaces/repositories/IProductRepository';
 
 @injectable()
 export class ProductRepository implements IProductRepository<Product> {
@@ -11,7 +11,7 @@ export class ProductRepository implements IProductRepository<Product> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM product";
+      const sql = 'SELECT * FROM product';
 
       const { rows } = await connection.query(sql);
 
@@ -53,7 +53,7 @@ export class ProductRepository implements IProductRepository<Product> {
       const { rows }: QueryResult = await connection.query(sql, [
         name,
         price,
-        category_id
+        category_id,
       ]);
 
       return rows[0];
@@ -69,7 +69,7 @@ export class ProductRepository implements IProductRepository<Product> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM product where id = $1";
+      const sql = 'SELECT * FROM product where id = $1';
 
       const { rows } = await connection.query(sql, [id]);
 
@@ -87,7 +87,7 @@ export class ProductRepository implements IProductRepository<Product> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM product where name = $1";
+      const sql = 'SELECT * FROM product where name = $1';
 
       const { rows } = await connection.query(sql, [name]);
 
@@ -105,7 +105,7 @@ export class ProductRepository implements IProductRepository<Product> {
     console.log(1);
     try {
       connection = await Client.connect();
-      const sql = "DELETE FROM product WHERE id=$1 RETURNING * ";
+      const sql = 'DELETE FROM product WHERE id=$1 RETURNING * ';
 
       const { rows } = await connection.query(sql, [id]);
       console.log(1);
@@ -123,7 +123,7 @@ export class ProductRepository implements IProductRepository<Product> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM product where category_id=$1";
+      const sql = 'SELECT * FROM product where category_id=$1';
 
       const { rows } = await connection.query(sql, [categoryId]);
 

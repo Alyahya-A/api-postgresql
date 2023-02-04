@@ -1,9 +1,9 @@
-import { inject, injectable } from "inversify";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { Category } from "../interfaces/category";
-import { APIError } from "../models/errors/apiError";
-import { CategoryRepository } from "../repositories/categoryRepository";
+import { inject, injectable } from 'inversify';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { Category } from '../interfaces/category';
+import { APIError } from '../models/errors/apiError';
+import { CategoryRepository } from '../repositories/categoryRepository';
 
 @injectable()
 export class CategoryService {

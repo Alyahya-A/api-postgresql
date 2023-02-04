@@ -1,8 +1,8 @@
-import { injectable } from "inversify";
-import { PoolClient, QueryResult } from "pg";
-import Client from "../database";
-import { LkStatus } from "../interfaces/lkStatus";
-import { IStatusRepository } from "../interfaces/repositories/IStatusRepository";
+import { injectable } from 'inversify';
+import { PoolClient, QueryResult } from 'pg';
+import Client from '../database';
+import { LkStatus } from '../interfaces/lkStatus';
+import { IStatusRepository } from '../interfaces/repositories/IStatusRepository';
 
 @injectable()
 export class StatusRepository implements IStatusRepository<LkStatus> {
@@ -11,7 +11,7 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM lk_status";
+      const sql = 'SELECT * FROM lk_status';
 
       const { rows } = await connection.query(sql);
 
@@ -65,7 +65,7 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM lk_status where id = $1";
+      const sql = 'SELECT * FROM lk_status where id = $1';
 
       const { rows } = await connection.query(sql, [id]);
 
@@ -83,7 +83,7 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM lk_status where name = $1";
+      const sql = 'SELECT * FROM lk_status where name = $1';
 
       const { rows } = await connection.query(sql, [name]);
 
@@ -101,7 +101,7 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM lk_status where code = $1";
+      const sql = 'SELECT * FROM lk_status where code = $1';
 
       const { rows } = await connection.query(sql, [code]);
 
@@ -119,7 +119,7 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
 
     try {
       connection = await Client.connect();
-      const sql = "DELETE FROM lk_status WHERE id=$1 RETURNING * ";
+      const sql = 'DELETE FROM lk_status WHERE id=$1 RETURNING * ';
 
       const { rows } = await connection.query(sql, [id]);
 

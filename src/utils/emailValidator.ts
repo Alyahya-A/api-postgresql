@@ -4,7 +4,7 @@ var expression =
 export const emailValidator = (email: string): boolean => {
   if (!email) return false;
 
-  var emailParts = email.split("@");
+  var emailParts = email.split('@');
 
   if (emailParts.length !== 2) return false;
 
@@ -14,7 +14,7 @@ export const emailValidator = (email: string): boolean => {
   if (account.length > 64) return false;
   else if (address.length > 255) return false;
 
-  var domainParts = address.split(".");
+  var domainParts = address.split('.');
 
   if (domainParts[1].length < 2) return false;
 

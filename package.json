@@ -9,7 +9,9 @@
     "build": "npx tsc && cp ./src/config/config.env ./dist/config/",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "test": "set ENV=test && npm run build && db-migrate db:create storefront_backend_test && db-migrate --env test up && jasmine && db-migrate db:drop storefront_backend_test",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "format:check": "prettier --config .prettierrc src/**/*.ts --check",
+    "format:fix": "prettier --config .prettierrc src/**/*.ts --write"
   },
   "author": "Udacity",
   "license": "ISC",
@@ -49,6 +51,7 @@
     "jasmine": "^3.99.0",
     "jasmine-ts": "^0.3.0",
     "nodemon": "^2.0.20",
+    "prettier": "^2.8.3",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsc-watch": "^4.2.9"

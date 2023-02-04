@@ -1,5 +1,5 @@
-import { Product } from "../product";
-import { BaseRepository } from "./baseRepository";
+import { Product } from '../product';
+import { BaseRepository } from './baseRepository';
 
 export interface IProductRepository<T> extends BaseRepository<T> {
   existsByName(name: string): Promise<boolean>;

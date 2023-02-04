@@ -1,4 +1,4 @@
-import { StatusCode } from "../../consts/statusCodes";
+import { StatusCode } from '../../consts/statusCodes';
 
 export class BaseError extends Error {
   public readonly title: string;

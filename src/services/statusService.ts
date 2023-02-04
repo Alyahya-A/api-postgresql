@@ -1,9 +1,9 @@
-import { inject, injectable } from "inversify";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { LkStatus } from "../interfaces/lkStatus";
-import { APIError } from "../models/errors/apiError";
-import { StatusRepository } from "../repositories/statusRepository";
+import { inject, injectable } from 'inversify';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { LkStatus } from '../interfaces/lkStatus';
+import { APIError } from '../models/errors/apiError';
+import { StatusRepository } from '../repositories/statusRepository';
 
 @injectable()
 export class StatusService {

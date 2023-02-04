@@ -1,5 +1,5 @@
 // export const orderEndpoint: Router = Router();
-import { inject } from "inversify";
+import { inject } from 'inversify';
 import {
   BaseHttpController,
   controller,
@@ -8,17 +8,17 @@ import {
   httpPost,
   httpPut,
   requestBody,
-  requestParam
-} from "inversify-express-utils";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { UserContext } from "../contexts/userContext";
-import { Order, OrderItem } from "../interfaces/order";
-import { APIError } from "../models/errors/apiError";
-import { NoDataFoundError } from "../models/errors/noDataError";
-import { OrderService } from "../services/orderService";
+  requestParam,
+} from 'inversify-express-utils';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { UserContext } from '../contexts/userContext';
+import { Order, OrderItem } from '../interfaces/order';
+import { APIError } from '../models/errors/apiError';
+import { NoDataFoundError } from '../models/errors/noDataError';
+import { OrderService } from '../services/orderService';
 
-@controller("/orders", TYPES.AuthMiddleware)
+@controller('/orders', TYPES.AuthMiddleware)
 export class OrderController extends BaseHttpController {
   constructor(
     @inject(TYPES.OrderService)
@@ -30,7 +30,7 @@ export class OrderController extends BaseHttpController {
   }
 
   // Get all orders
-  @httpGet("/")
+  @httpGet('/')
   async index() {
     const allOrders: Order[] = await this._orderService.getAllOrders();
 
@@ -42,7 +42,7 @@ export class OrderController extends BaseHttpController {
   }
 
   // Completed order by user
-  @httpGet("/completed")
+  @httpGet('/completed')
   async completedOrderByUser() {
     const orders: Order[] = await this._orderService.completedOrders(
       this._userContext.getId()
@@ -56,7 +56,7 @@ export class OrderController extends BaseHttpController {
   }
 
   // Completed order by user
-  @httpGet("/active")
+  @httpGet('/active')
   async getActiveOrder() {
     console.log(`userId: ${this._userContext.getId()}`);
 
@@ -72,8 +72,8 @@ export class OrderController extends BaseHttpController {
   }
 
   //  Get order by id
-  @httpGet("/:id")
-  async getOrderById(@requestParam("id") id: number) {
+  @httpGet('/:id')
+  async getOrderById(@requestParam('id') id: number) {
     const order: Order = await this._orderService.getOrderById(id);
 
     if (!order) {
@@ -84,7 +84,7 @@ export class OrderController extends BaseHttpController {
   }
 
   // Create order
-  @httpPost("/")
+  @httpPost('/')
   async create() {
     const created: Order = await this._orderService.createOrder(
       this._userContext.getId()
@@ -94,17 +94,17 @@ export class OrderController extends BaseHttpController {
   }
 
   // Delete order
-  @httpDelete("/:id")
-  async deleteOrder(@requestParam("id") id: number) {
+  @httpDelete('/:id')
+  async deleteOrder(@requestParam('id') id: number) {
     const order: Order = await this._orderService.deleteOrder(id);
 
     return this.json(order, StatusCode.ok);
   }
 
   // Add item/product to active order
-  @httpPost("/:orderId/products")
+  @httpPost('/:orderId/products')
   async addItemToOrder(
-    @requestParam("orderId") orderId: number,
+    @requestParam('orderId') orderId: number,
     @requestBody() req: OrderItem
   ) {
     req.order_id = orderId;
@@ -114,8 +114,8 @@ export class OrderController extends BaseHttpController {
   }
 
   // Complete order
-  @httpPut("/:orderId/complete")
-  async completeOrder(@requestParam("orderId") orderId: number) {
+  @httpPut('/:orderId/complete')
+  async completeOrder(@requestParam('orderId') orderId: number) {
     const order: Order = await this._orderService.completeOrder(orderId);
 
     if (!order) {

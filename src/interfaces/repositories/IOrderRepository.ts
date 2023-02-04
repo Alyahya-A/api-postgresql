@@ -1,5 +1,5 @@
-import { OrderItem } from "../order";
-import { BaseRepository } from "./baseRepository";
+import { OrderItem } from '../order';
+import { BaseRepository } from './baseRepository';
 
 export interface IOrderRepository<T> extends BaseRepository<T> {
   addItem(item: OrderItem): Promise<OrderItem>;

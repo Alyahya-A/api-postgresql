@@ -1,4 +1,4 @@
-import { inject } from "inversify";
+import { inject } from 'inversify';
 import {
   BaseHttpController,
   controller,
@@ -6,18 +6,18 @@ import {
   httpGet,
   httpPost,
   requestBody,
-  requestParam
-} from "inversify-express-utils";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { Category } from "../interfaces/category";
-import { Product } from "../interfaces/product";
-import { InvalidParamError } from "../models/errors/invalidParamError";
-import { NoDataFoundError } from "../models/errors/noDataError";
-import { CategoryService } from "../services/categoryService";
-import { ProductService } from "../services/productService";
+  requestParam,
+} from 'inversify-express-utils';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { Category } from '../interfaces/category';
+import { Product } from '../interfaces/product';
+import { InvalidParamError } from '../models/errors/invalidParamError';
+import { NoDataFoundError } from '../models/errors/noDataError';
+import { CategoryService } from '../services/categoryService';
+import { ProductService } from '../services/productService';
 
-@controller("/categories")
+@controller('/categories')
 export class CategoryController extends BaseHttpController {
   constructor(
     @inject(TYPES.CategoryService)
@@ -29,7 +29,7 @@ export class CategoryController extends BaseHttpController {
   }
 
   // Get all categories
-  @httpGet("/")
+  @httpGet('/')
   async index() {
     const allCategories: Category[] =
       await this._categoryService.getAllCategories();
@@ -42,8 +42,8 @@ export class CategoryController extends BaseHttpController {
   }
 
   //  Get category by id
-  @httpGet("/:id")
-  async getCategoryById(@requestParam("id") id: number) {
+  @httpGet('/:id')
+  async getCategoryById(@requestParam('id') id: number) {
     const category = await this._categoryService.getCategoryById(id);
 
     if (!category) {
@@ -54,11 +54,11 @@ export class CategoryController extends BaseHttpController {
   }
 
   // Create category
-  @httpPost("/", TYPES.AuthMiddleware)
+  @httpPost('/', TYPES.AuthMiddleware)
   async create(@requestBody() req: Category) {
     if (!req.name) {
       return this.json(
-        new InvalidParamError("Invalid category name!", 1000),
+        new InvalidParamError('Invalid category name!', 1000),
         StatusCode.badRequest
       );
     }
@@ -69,16 +69,16 @@ export class CategoryController extends BaseHttpController {
   }
 
   // Delete category
-  @httpDelete("/:id", TYPES.AuthMiddleware)
-  async deleteCategory(@requestParam("id") id: number) {
+  @httpDelete('/:id', TYPES.AuthMiddleware)
+  async deleteCategory(@requestParam('id') id: number) {
     const category = await this._categoryService.deleteCategory(id);
 
     return this.json(category, StatusCode.ok);
   }
 
   //  Get products by category Id
-  @httpGet("/:categoryId/products")
-  async getCategoryProducts(@requestParam("categoryId") id: number) {
+  @httpGet('/:categoryId/products')
+  async getCategoryProducts(@requestParam('categoryId') id: number) {
     const products: Product[] = await this._productService.getCategoryProducts(
       id
     );

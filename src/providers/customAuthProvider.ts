@@ -1,14 +1,14 @@
-import express from "express";
-import { inject, injectable } from "inversify";
-import { interfaces } from "inversify-express-utils";
-import TYPES from "../consts/types";
-import { ApplicationContext } from "../contexts/applicationContext";
-import { UserContext } from "../contexts/userContext";
-import { container } from "../di-container";
-import { TokenResDto } from "../models/dto/tokenDto";
-import { UserService } from "../services/userService";
-import { verifyToken } from "../utils/verifyToken";
-import { Principal } from "./principal";
+import express from 'express';
+import { inject, injectable } from 'inversify';
+import { interfaces } from 'inversify-express-utils';
+import TYPES from '../consts/types';
+import { ApplicationContext } from '../contexts/applicationContext';
+import { UserContext } from '../contexts/userContext';
+import { container } from '../di-container';
+import { TokenResDto } from '../models/dto/tokenDto';
+import { UserService } from '../services/userService';
+import { verifyToken } from '../utils/verifyToken';
+import { Principal } from './principal';
 
 const userService = inject(TYPES.UserService);
 
@@ -22,7 +22,7 @@ export class CustomAuthProvider implements interfaces.AuthProvider {
     res: express.Response,
     next: express.NextFunction
   ): Promise<interfaces.Principal> {
-    const token = req.headers.authorization?.replace("Bearer ", "");
+    const token = req.headers.authorization?.replace('Bearer ', '');
 
     if (token) {
       try {

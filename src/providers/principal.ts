@@ -1,5 +1,5 @@
-import { interfaces } from "inversify-express-utils";
-import { User } from "../interfaces/user";
+import { interfaces } from 'inversify-express-utils';
+import { User } from '../interfaces/user';
 
 export class Principal implements interfaces.Principal {
   public details: User | undefined;
@@ -17,6 +17,6 @@ export class Principal implements interfaces.Principal {
   }
 
   public isInRole(role: string): Promise<boolean> {
-    return Promise.resolve(role === "admin");
+    return Promise.resolve(role === 'admin');
   }
 }

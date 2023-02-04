@@ -1,8 +1,8 @@
-import express from "express";
-import { Guid } from "guid-typescript";
-import { StatusCode } from "../../consts/statusCodes";
-import { logger } from "../../logger/logger";
-import { BaseError } from "./baseError";
+import express from 'express';
+import { Guid } from 'guid-typescript';
+import { StatusCode } from '../../consts/statusCodes';
+import { logger } from '../../logger/logger';
+import { BaseError } from './baseError';
 
 class ErrorHandler {
   public async handleError(
@@ -12,7 +12,7 @@ class ErrorHandler {
   ): Promise<void> {
     var body = {
       traceId: traceId.toString(),
-      body: req.body
+      body: req.body,
     };
 
     logger.error(JSON.stringify(body), err);

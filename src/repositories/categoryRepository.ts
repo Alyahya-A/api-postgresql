@@ -1,8 +1,8 @@
-import { injectable } from "inversify";
-import { PoolClient, QueryResult } from "pg";
-import Client from "../database";
-import { Category } from "../interfaces/category";
-import { ICategoryRepository } from "../interfaces/repositories/ICategoryRepository";
+import { injectable } from 'inversify';
+import { PoolClient, QueryResult } from 'pg';
+import Client from '../database';
+import { Category } from '../interfaces/category';
+import { ICategoryRepository } from '../interfaces/repositories/ICategoryRepository';
 
 @injectable()
 export class CategoryRepository implements ICategoryRepository<Category> {
@@ -11,7 +11,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM category";
+      const sql = 'SELECT * FROM category';
 
       const { rows } = await connection.query(sql);
 
@@ -53,7 +53,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
       const { rows }: QueryResult = await connection.query(sql, [
         name,
-        description
+        description,
       ]);
 
       return rows[0];
@@ -69,7 +69,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM category where id = $1";
+      const sql = 'SELECT * FROM category where id = $1';
 
       const { rows } = await connection.query(sql, [id]);
 
@@ -87,7 +87,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM category where name = $1";
+      const sql = 'SELECT * FROM category where name = $1';
 
       const { rows } = await connection.query(sql, [name]);
 
@@ -105,7 +105,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
     try {
       connection = await Client.connect();
-      const sql = "DELETE FROM category WHERE id=$1 RETURNING * ";
+      const sql = 'DELETE FROM category WHERE id=$1 RETURNING * ';
 
       const { rows } = await connection.query(sql, [id]);
 

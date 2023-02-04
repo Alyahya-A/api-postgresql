@@ -1,48 +1,48 @@
 //reflect-metadata should be imported before any interface or other imports
 //also it should be imported only once, so that a singleton is created.
-import "reflect-metadata";
+import 'reflect-metadata';
 
-import { Container } from "inversify";
-import { CategoryRepository } from "./repositories/categoryRepository";
-import { ProductRepository } from "./repositories/productRepository";
-import { CategoryService } from "./services/categoryService";
-import { ProductService } from "./services/productService";
+import { Container } from 'inversify';
+import { CategoryRepository } from './repositories/categoryRepository';
+import { ProductRepository } from './repositories/productRepository';
+import { CategoryService } from './services/categoryService';
+import { ProductService } from './services/productService';
 
-import TYPES from "./consts/types";
-import { ApplicationContext } from "./contexts/applicationContext";
-import { UserContext } from "./contexts/userContext";
-import { Category } from "./interfaces/category";
-import { LkStatus } from "./interfaces/lkStatus";
-import { Product } from "./interfaces/product";
-import { ICategoryRepository } from "./interfaces/repositories/ICategoryRepository";
-import { IProductRepository } from "./interfaces/repositories/IProductRepository";
-import { IStatusRepository } from "./interfaces/repositories/IStatusRepository";
-import { IUserRepository } from "./interfaces/repositories/IUserRepository";
-import { User } from "./interfaces/user";
-import { AuthMiddleware } from "./middlewares/authMiddleware";
-import { StatusRepository } from "./repositories/statusRepository";
-import { UserRepository } from "./repositories/userRepository";
-import { StatusService } from "./services/statusService";
-import { UserService } from "./services/userService";
+import TYPES from './consts/types';
+import { ApplicationContext } from './contexts/applicationContext';
+import { UserContext } from './contexts/userContext';
+import { Category } from './interfaces/category';
+import { LkStatus } from './interfaces/lkStatus';
+import { Product } from './interfaces/product';
+import { ICategoryRepository } from './interfaces/repositories/ICategoryRepository';
+import { IProductRepository } from './interfaces/repositories/IProductRepository';
+import { IStatusRepository } from './interfaces/repositories/IStatusRepository';
+import { IUserRepository } from './interfaces/repositories/IUserRepository';
+import { User } from './interfaces/user';
+import { AuthMiddleware } from './middlewares/authMiddleware';
+import { StatusRepository } from './repositories/statusRepository';
+import { UserRepository } from './repositories/userRepository';
+import { StatusService } from './services/statusService';
+import { UserService } from './services/userService';
 // Controllers are required to imported one unique time
-import "./controllers/categoryController";
-import { CategoryController } from "./controllers/categoryController";
-import "./controllers/orderController";
-import { OrderController } from "./controllers/orderController";
-import "./controllers/productController";
-import { ProductController } from "./controllers/productController";
-import "./controllers/statusController";
-import { StatusController } from "./controllers/statusController";
-import "./controllers/tokenController";
-import "./controllers/userController";
-import { UserController } from "./controllers/userController";
-import { Order } from "./interfaces/order";
-import { IOrderRepository } from "./interfaces/repositories/IOrderRepository";
-import { OrderRepository } from "./repositories/orderRepository";
-import { OrderService } from "./services/orderService";
+import './controllers/categoryController';
+import { CategoryController } from './controllers/categoryController';
+import './controllers/orderController';
+import { OrderController } from './controllers/orderController';
+import './controllers/productController';
+import { ProductController } from './controllers/productController';
+import './controllers/statusController';
+import { StatusController } from './controllers/statusController';
+import './controllers/tokenController';
+import './controllers/userController';
+import { UserController } from './controllers/userController';
+import { Order } from './interfaces/order';
+import { IOrderRepository } from './interfaces/repositories/IOrderRepository';
+import { OrderRepository } from './repositories/orderRepository';
+import { OrderService } from './services/orderService';
 
 export const container = new Container({
-  defaultScope: "Singleton"
+  defaultScope: 'Singleton',
 });
 
 //////////////////////////////////////////////////

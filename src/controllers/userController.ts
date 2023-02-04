@@ -1,4 +1,4 @@
-import { inject } from "inversify";
+import { inject } from 'inversify';
 import {
   BaseHttpController,
   controller,
@@ -6,24 +6,24 @@ import {
   httpGet,
   httpPost,
   requestBody,
-  requestParam
-} from "inversify-express-utils";
-import PasswordValidator from "password-validator";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { User } from "../interfaces/user";
+  requestParam,
+} from 'inversify-express-utils';
+import PasswordValidator from 'password-validator';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { User } from '../interfaces/user';
 import {
   CreateUserReqDto,
-  CreateUserResDto
-} from "../models/dto/createUserDto";
-import { TokenReqDto } from "../models/dto/tokenDto";
-import { UserDto } from "../models/dto/userDto";
-import { InvalidParamError } from "../models/errors/invalidParamError";
-import { NoDataFoundError } from "../models/errors/noDataError";
-import { UserService } from "../services/userService";
-import { emailValidator } from "../utils/emailValidator";
+  CreateUserResDto,
+} from '../models/dto/createUserDto';
+import { TokenReqDto } from '../models/dto/tokenDto';
+import { UserDto } from '../models/dto/userDto';
+import { InvalidParamError } from '../models/errors/invalidParamError';
+import { NoDataFoundError } from '../models/errors/noDataError';
+import { UserService } from '../services/userService';
+import { emailValidator } from '../utils/emailValidator';
 
-@controller("/users")
+@controller('/users')
 export class UserController extends BaseHttpController {
   private readonly schema: PasswordValidator;
 
@@ -50,7 +50,7 @@ export class UserController extends BaseHttpController {
   }
 
   // Get all users
-  @httpGet("/", TYPES.AuthMiddleware)
+  @httpGet('/', TYPES.AuthMiddleware)
   async index() {
     const allUser: UserDto[] = await this._userService.getAllUser();
 
@@ -62,8 +62,8 @@ export class UserController extends BaseHttpController {
   }
 
   //  Get user by id
-  @httpGet("/:id", TYPES.AuthMiddleware)
-  async getProductById(@requestParam("id") id: number) {
+  @httpGet('/:id', TYPES.AuthMiddleware)
+  async getProductById(@requestParam('id') id: number) {
     const user: UserDto = await this._userService.getUserById(id);
 
     if (!user) {
@@ -74,25 +74,25 @@ export class UserController extends BaseHttpController {
   }
 
   // Create user
-  @httpPost("/")
+  @httpPost('/')
   async create(@requestBody() req: CreateUserReqDto) {
     if (!req.firstName) {
       return this.json(
-        new InvalidParamError("Invalid first name!", 5000),
+        new InvalidParamError('Invalid first name!', 5000),
         StatusCode.badRequest
       );
     }
 
     if (!req.lastName) {
       return this.json(
-        new InvalidParamError("Invalid last name!", 5001),
+        new InvalidParamError('Invalid last name!', 5001),
         StatusCode.badRequest
       );
     }
 
     if (!emailValidator(req.email)) {
       return this.json(
-        new InvalidParamError("Invalid email address!", 5002),
+        new InvalidParamError('Invalid email address!', 5002),
         StatusCode.badRequest
       );
     }
@@ -100,7 +100,7 @@ export class UserController extends BaseHttpController {
     if (!this.schema.validate(req.password)) {
       return this.json(
         new InvalidParamError(
-          "Invalid password!. Password length must be 8 or more, have uppercase letters and have lowercase letters",
+          'Invalid password!. Password length must be 8 or more, have uppercase letters and have lowercase letters',
           5003
         ),
         StatusCode.badRequest
@@ -112,7 +112,7 @@ export class UserController extends BaseHttpController {
       lastname: req.lastName,
       email: req.email,
       password_encrypt: req.password,
-      id: 0
+      id: 0,
     };
 
     const created: UserDto = await this._userService.createUser(user);
@@ -125,21 +125,21 @@ export class UserController extends BaseHttpController {
       firstName: created.firstName,
       lastName: created.lastName,
       email: created.email,
-      token: token
+      token: token,
     };
 
     return this.json(userRes, StatusCode.created);
   }
 
   // Delete user
-  @httpDelete("/:id", TYPES.AuthMiddleware)
-  async deleteProduct(@requestParam("id") id: number) {
+  @httpDelete('/:id', TYPES.AuthMiddleware)
+  async deleteProduct(@requestParam('id') id: number) {
     const user: UserDto = await this._userService.deleteUser(id);
 
     const userRes = {
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email
+      email: user.email,
     };
 
     return this.json(userRes, StatusCode.ok);

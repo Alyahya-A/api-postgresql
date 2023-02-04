@@ -1,10 +1,10 @@
-import { injectable } from "inversify";
-import { PoolClient, QueryResult } from "pg";
-import Client from "../database";
-import { IUserRepository } from "../interfaces/repositories/IUserRepository";
-import { User } from "../interfaces/user";
-import { TokenReqDto } from "../models/dto/tokenDto";
-import { comparePassword, encryptPassword } from "../utils/bcrypt";
+import { injectable } from 'inversify';
+import { PoolClient, QueryResult } from 'pg';
+import Client from '../database';
+import { IUserRepository } from '../interfaces/repositories/IUserRepository';
+import { User } from '../interfaces/user';
+import { TokenReqDto } from '../models/dto/tokenDto';
+import { comparePassword, encryptPassword } from '../utils/bcrypt';
 
 @injectable()
 export class UserRepository implements IUserRepository<User> {
@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository<User> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM users";
+      const sql = 'SELECT * FROM users';
 
       const { rows } = await connection.query(sql);
 
@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository<User> {
         firstname,
         lastname,
         email,
-        encryptPassword(password_encrypt)
+        encryptPassword(password_encrypt),
       ]);
 
       return rows[0];
@@ -72,7 +72,7 @@ export class UserRepository implements IUserRepository<User> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM users where id = $1";
+      const sql = 'SELECT * FROM users where id = $1';
 
       const { rows } = await connection.query(sql, [id]);
 
@@ -90,7 +90,7 @@ export class UserRepository implements IUserRepository<User> {
 
     try {
       connection = await Client.connect();
-      const sql = "DELETE FROM users WHERE id=$1 RETURNING * ";
+      const sql = 'DELETE FROM users WHERE id=$1 RETURNING * ';
 
       const { rows } = await connection.query(sql, [id]);
 
@@ -107,7 +107,7 @@ export class UserRepository implements IUserRepository<User> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1";
+      const sql = 'SELECT * FROM users where email = $1';
 
       const { rows } = await connection.query(sql, [email]);
 
@@ -123,7 +123,7 @@ export class UserRepository implements IUserRepository<User> {
 
     try {
       connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1";
+      const sql = 'SELECT * FROM users where email = $1';
 
       const { rows } = await connection.query(sql, [email]);
 
@@ -143,7 +143,7 @@ export class UserRepository implements IUserRepository<User> {
       const { email, password } = user;
 
       connection = await Client.connect();
-      const sql = "SELECT * FROM users where email = $1 ";
+      const sql = 'SELECT * FROM users where email = $1 ';
 
       const { rows } = await connection.query(sql, [email]);
 

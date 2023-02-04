@@ -1,10 +1,10 @@
-import { inject, injectable } from "inversify";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { Order, OrderItem } from "../interfaces/order";
-import { APIError } from "../models/errors/apiError";
-import { OrderRepository } from "../repositories/orderRepository";
-import { ProductRepository } from "../repositories/productRepository";
+import { inject, injectable } from 'inversify';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { Order, OrderItem } from '../interfaces/order';
+import { APIError } from '../models/errors/apiError';
+import { OrderRepository } from '../repositories/orderRepository';
+import { ProductRepository } from '../repositories/productRepository';
 
 @injectable()
 export class OrderService {
@@ -28,7 +28,7 @@ export class OrderService {
 
     if (order != null) {
       throw new APIError(
-        "Could not create order since user has an active order",
+        'Could not create order since user has an active order',
         2200,
         StatusCode.badRequest,
         true
@@ -39,14 +39,14 @@ export class OrderService {
       user_id: userId,
       id: 0,
       products: [],
-      status: ""
+      status: '',
     });
 
     return {
       id: createdOrder.id,
       user_id: createdOrder.user_id,
       products: [],
-      status: "Active"
+      status: 'Active',
     };
   }
 

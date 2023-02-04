@@ -1,7 +1,7 @@
-import express from "express";
-import { Guid } from "guid-typescript";
-import { StatusCode } from "../consts/statusCodes";
-import { errorHandler } from "../models/errors/errorHandler";
+import express from 'express';
+import { Guid } from 'guid-typescript';
+import { StatusCode } from '../consts/statusCodes';
+import { errorHandler } from '../models/errors/errorHandler';
 
 export const loggerMiddleware = async (
   err: Error,
@@ -11,7 +11,7 @@ export const loggerMiddleware = async (
 ) => {
   let traceId = Guid.create();
 
-  req.headers["x-trace-id"] = traceId.toString();
+  req.headers['x-trace-id'] = traceId.toString();
 
   await errorHandler.handleError(req, traceId, err);
 
@@ -23,7 +23,7 @@ export const loggerMiddleware = async (
     res.status(StatusCode.internalServer).json({
       title: `Internal server error. Please contact to customer service`,
       httpCode: 500,
-      traceId: traceId.toString()
+      traceId: traceId.toString(),
     });
   }
 };

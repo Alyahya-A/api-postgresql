@@ -1,6 +1,6 @@
-import { BaseEntity } from "./baseEntity";
+import { BaseEntity } from './baseEntity';
 
 export interface LkStatus extends BaseEntity {
-  code: number
+  code: number;
   name: string;
 }

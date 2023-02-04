@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
-import { Secret } from "jsonwebtoken";
-import path from "path";
+import dotenv from 'dotenv';
+import { Secret } from 'jsonwebtoken';
+import path from 'path';
 
 // Parsing the env file.
-dotenv.config({ path: path.resolve(__dirname, "../config/config.env") });
+dotenv.config({ path: path.resolve(__dirname, '../config/config.env') });
 
 // Interface to load env variables
 // Note these variables can possibly be undefined
@@ -35,12 +35,12 @@ const getConfig = (): Config => {
     Secret: process.env.JWT_SECRET as Secret,
     SaltRounds: process.env.SaltRounds
       ? Number(process.env.SaltRounds)
-      : undefined
+      : undefined,
   };
 };
 
 const config = getConfig();
 
-export const isDevEnvironment = () => config.ENV === "dev";
+export const isDevEnvironment = () => config.ENV === 'dev';
 
 export default config;

@@ -1,13 +1,13 @@
-import { inject, injectable } from "inversify";
-import jwt from "jsonwebtoken";
-import config from "../config/config";
-import { StatusCode } from "../consts/statusCodes";
-import TYPES from "../consts/types";
-import { User } from "../interfaces/user";
-import { TokenReqDto } from "../models/dto/tokenDto";
-import { UserDto } from "../models/dto/userDto";
-import { APIError } from "../models/errors/apiError";
-import { UserRepository } from "../repositories/userRepository";
+import { inject, injectable } from 'inversify';
+import jwt from 'jsonwebtoken';
+import config from '../config/config';
+import { StatusCode } from '../consts/statusCodes';
+import TYPES from '../consts/types';
+import { User } from '../interfaces/user';
+import { TokenReqDto } from '../models/dto/tokenDto';
+import { UserDto } from '../models/dto/userDto';
+import { APIError } from '../models/errors/apiError';
+import { UserRepository } from '../repositories/userRepository';
 
 @injectable()
 export class UserService {
@@ -22,7 +22,7 @@ export class UserService {
       users.push({
         firstName: user.firstname,
         lastName: user.lastname,
-        email: user.email
+        email: user.email,
       });
     }
 
@@ -44,7 +44,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email
+      email: user.email,
     };
   }
 
@@ -54,7 +54,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email
+      email: user.email,
     };
   }
 
@@ -81,7 +81,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email
+      email: user.email,
     };
   }
 
@@ -96,10 +96,10 @@ export class UserService {
     }
 
     return jwt.sign(
-      { email: user.email, claims: "user", issuedAt: new Date() },
+      { email: user.email, claims: 'user', issuedAt: new Date() },
       config.Secret,
       {
-        expiresIn: "1d"
+        expiresIn: '1d',
       }
     );
   }
