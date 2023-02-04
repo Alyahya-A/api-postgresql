@@ -42,7 +42,7 @@ import { OrderRepository } from './repositories/orderRepository';
 import { OrderService } from './services/orderService';
 
 export const container = new Container({
-  defaultScope: 'Singleton',
+  defaultScope: 'Singleton'
 });
 
 //////////////////////////////////////////////////

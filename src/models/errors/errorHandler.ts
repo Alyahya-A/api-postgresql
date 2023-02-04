@@ -12,7 +12,7 @@ class ErrorHandler {
   ): Promise<void> {
     var body = {
       traceId: traceId.toString(),
-      body: req.body,
+      body: req.body
     };
 
     logger.error(JSON.stringify(body), err);

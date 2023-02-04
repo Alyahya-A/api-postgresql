@@ -32,7 +32,7 @@ describe('Order controller', () => {
     try {
       token = await userService.generateToken({
         email: userData.email,
-        password: userData.password_encrypt,
+        password: userData.password_encrypt
       });
     } catch (error) {
       if (error instanceof APIError && error.errorCode === 5202) {
@@ -40,12 +40,12 @@ describe('Order controller', () => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          password_encrypt: userData.password_encrypt,
+          password_encrypt: userData.password_encrypt
         });
 
         token = await userService.generateToken({
           email: userData.email,
-          password: userData.password_encrypt,
+          password: userData.password_encrypt
         });
       }
     }
@@ -70,7 +70,7 @@ describe('Order controller', () => {
       title: 'No data found',
       httpCode: 404,
       isOperational: true,
-      errorCode: 4000,
+      errorCode: 4000
     });
   });
 
@@ -84,7 +84,7 @@ describe('Order controller', () => {
       id: 1,
       user_id: 1,
       products: [],
-      status: 'Active',
+      status: 'Active'
     });
   });
 
@@ -98,7 +98,7 @@ describe('Order controller', () => {
       id: 1,
       status: 'Active',
       user_id: 1,
-      products: [],
+      products: []
     });
   });
 
@@ -109,7 +109,7 @@ describe('Order controller', () => {
 
     const category: Category = await categoryService.createCategory({
       name: 'Electronics',
-      description: 'Electronics categoty',
+      description: 'Electronics categoty'
     });
 
     const productService = container.get<ProductService>(TYPES.ProductService);
@@ -117,7 +117,7 @@ describe('Order controller', () => {
     const product: Product = await productService.createProduct({
       name: 'Product 1',
       price: '15',
-      category_id: category.id!,
+      category_id: category.id!
     });
 
     const response = await request
@@ -125,7 +125,7 @@ describe('Order controller', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         product_id: product.id!,
-        quantity: 2,
+        quantity: 2
       });
 
     expect(response.status).toBe(StatusCode.ok);
@@ -133,7 +133,7 @@ describe('Order controller', () => {
       id: 1,
       order_id: 1,
       product_id: 1,
-      quantity: 2,
+      quantity: 2
     });
   });
 
@@ -152,9 +152,9 @@ describe('Order controller', () => {
           id: 1,
           order_id: 1,
           product_id: 1,
-          quantity: 2,
-        },
-      ],
+          quantity: 2
+        }
+      ]
     });
   });
 
@@ -173,9 +173,9 @@ describe('Order controller', () => {
           id: 1,
           order_id: 1,
           product_id: 1,
-          quantity: 2,
-        },
-      ],
+          quantity: 2
+        }
+      ]
     });
   });
 
@@ -195,10 +195,10 @@ describe('Order controller', () => {
             id: 1,
             order_id: 1,
             product_id: 1,
-            quantity: 2,
-          },
-        ],
-      },
+            quantity: 2
+          }
+        ]
+      }
     ]);
   });
 });

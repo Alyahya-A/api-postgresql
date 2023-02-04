@@ -30,7 +30,7 @@ describe('User controller', () => {
     try {
       token = await userService.generateToken({
         email: userData.email,
-        password: userData.password_encrypt,
+        password: userData.password_encrypt
       });
     } catch (error) {
       if (error instanceof APIError && error.errorCode === 5202) {
@@ -38,12 +38,12 @@ describe('User controller', () => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          password_encrypt: userData.password_encrypt,
+          password_encrypt: userData.password_encrypt
         });
 
         token = await userService.generateToken({
           email: userData.email,
-          password: userData.password_encrypt,
+          password: userData.password_encrypt
         });
       }
     }
@@ -63,7 +63,7 @@ describe('User controller', () => {
         firstName: 'Abdulrahman',
         lastName: 'Alyahya',
         email: 'abdulrahman@alyahya.dev',
-        password: 'Aa123456',
+        password: 'Aa123456'
       });
 
     const createdUser: CreateUserResDto = response.body;
@@ -72,11 +72,11 @@ describe('User controller', () => {
     expect({
       firstName: createdUser.firstName,
       lastName: createdUser.lastName,
-      email: createdUser.email,
+      email: createdUser.email
     }).toEqual({
       firstName: 'Abdulrahman',
       lastName: 'Alyahya',
-      email: 'abdulrahman@alyahya.dev',
+      email: 'abdulrahman@alyahya.dev'
     });
   });
 
@@ -90,7 +90,7 @@ describe('User controller', () => {
         firstName: 'Abdulrahman',
         lastName: 'Alyahya',
         email: 'abdulrahman@alyahya.a',
-        password: 'Aa123456',
+        password: 'Aa123456'
       });
 
     expect((response.body as APIError).errorCode).toBe(5002);
@@ -106,13 +106,13 @@ describe('User controller', () => {
       {
         firstName: 'Abdulrahman',
         lastName: 'Alyahya',
-        email: 'alyahya@alyahya.dev',
+        email: 'alyahya@alyahya.dev'
       },
       {
         firstName: 'Abdulrahman',
         lastName: 'Alyahya',
-        email: 'abdulrahman@alyahya.dev',
-      },
+        email: 'abdulrahman@alyahya.dev'
+      }
     ]);
   });
 
@@ -125,7 +125,7 @@ describe('User controller', () => {
     expect(response.body).toEqual({
       firstName: 'Abdulrahman',
       lastName: 'Alyahya',
-      email: 'alyahya@alyahya.dev',
+      email: 'alyahya@alyahya.dev'
     });
   });
 
@@ -138,7 +138,7 @@ describe('User controller', () => {
     expect(response.body).toEqual({
       firstName: 'Abdulrahman',
       lastName: 'Alyahya',
-      email: 'abdulrahman@alyahya.dev',
+      email: 'abdulrahman@alyahya.dev'
     });
   });
 });

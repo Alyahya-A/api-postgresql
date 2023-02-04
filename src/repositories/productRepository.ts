@@ -53,7 +53,7 @@ export class ProductRepository implements IProductRepository<Product> {
       const { rows }: QueryResult = await connection.query(sql, [
         name,
         price,
-        category_id,
+        category_id
       ]);
 
       return rows[0];

@@ -26,7 +26,7 @@ describe('Category Service', () => {
   it('create should add a category', async () => {
     const result = await categoryService.createCategory({
       name: 'Apparel',
-      description: 'Apparel categoty',
+      description: 'Apparel categoty'
     });
 
     createdCategoryId = result.id!;
@@ -34,7 +34,7 @@ describe('Category Service', () => {
     expect(result).toEqual({
       id: createdCategoryId,
       name: 'Apparel',
-      description: 'Apparel categoty',
+      description: 'Apparel categoty'
     });
   });
 
@@ -44,7 +44,7 @@ describe('Category Service', () => {
     try {
       await categoryService.createCategory({
         name: 'Apparel',
-        description: 'Apparel categoty',
+        description: 'Apparel categoty'
       });
     } catch (err) {
       if (err instanceof APIError) {
@@ -67,7 +67,7 @@ describe('Category Service', () => {
     expect(result).toEqual({
       id: createdCategoryId,
       name: 'Apparel',
-      description: 'Apparel categoty',
+      description: 'Apparel categoty'
     });
   });
 
@@ -83,7 +83,7 @@ describe('Category Service', () => {
     expect(result).toEqual({
       id: createdCategoryId,
       name: 'Apparel',
-      description: 'Apparel categoty',
+      description: 'Apparel categoty'
     });
   });
 });

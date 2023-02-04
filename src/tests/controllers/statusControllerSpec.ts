@@ -29,7 +29,7 @@ describe('Status controller', () => {
     try {
       token = await userService.generateToken({
         email: userData.email,
-        password: userData.password_encrypt,
+        password: userData.password_encrypt
       });
     } catch (error) {
       if (error instanceof APIError && error.errorCode === 5202) {
@@ -37,12 +37,12 @@ describe('Status controller', () => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          password_encrypt: userData.password_encrypt,
+          password_encrypt: userData.password_encrypt
         });
 
         token = await userService.generateToken({
           email: userData.email,
-          password: userData.password_encrypt,
+          password: userData.password_encrypt
         });
       }
     }
@@ -60,14 +60,14 @@ describe('Status controller', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         code: 4,
-        name: 'Pending',
+        name: 'Pending'
       });
 
     expect(response.status).toBe(StatusCode.created);
     expect(response.body).toEqual({
       id: 3,
       code: 4,
-      name: 'Pending',
+      name: 'Pending'
     });
   });
 
@@ -78,7 +78,7 @@ describe('Status controller', () => {
     expect(response.body).toEqual([
       { id: 1, code: 1, name: 'Active' },
       { id: 2, code: 2, name: 'Completed' },
-      { id: 3, code: 4, name: 'Pending' },
+      { id: 3, code: 4, name: 'Pending' }
     ]);
   });
 
@@ -89,7 +89,7 @@ describe('Status controller', () => {
     expect(response.body).toEqual({
       id: 1,
       code: 1,
-      name: 'Active',
+      name: 'Active'
     });
   });
 
@@ -102,7 +102,7 @@ describe('Status controller', () => {
     expect(response.body).toEqual({
       id: 3,
       code: 4,
-      name: 'Pending',
+      name: 'Pending'
     });
   });
 });

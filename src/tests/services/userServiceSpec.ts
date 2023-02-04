@@ -32,13 +32,13 @@ describe('User Service', () => {
       firstname: 'Mohammad',
       lastname: 'Alyahya',
       email: 'mohammad@alyahya.dev',
-      password_encrypt: 'Aa123456',
+      password_encrypt: 'Aa123456'
     });
 
     expect(result).toEqual({
       firstName: 'Mohammad',
       lastName: 'Alyahya',
-      email: 'mohammad@alyahya.dev',
+      email: 'mohammad@alyahya.dev'
     });
   });
 
@@ -50,7 +50,7 @@ describe('User Service', () => {
         firstname: 'Nasser',
         lastname: 'Khalid',
         email: 'mohammad@alyahya.dev',
-        password_encrypt: 'Aa123456',
+        password_encrypt: 'Aa123456'
       });
     } catch (err) {
       if (err instanceof APIError) {
@@ -75,11 +75,11 @@ describe('User Service', () => {
     expect({
       firstName: result.firstname,
       lastName: result.lastname,
-      email: result.email,
+      email: result.email
     }).toEqual({
       firstName: 'Mohammad',
       lastName: 'Alyahya',
-      email: 'mohammad@alyahya.dev',
+      email: 'mohammad@alyahya.dev'
     });
   });
 
@@ -89,7 +89,7 @@ describe('User Service', () => {
     expect(result).toEqual({
       firstName: 'Mohammad',
       lastName: 'Alyahya',
-      email: 'mohammad@alyahya.dev',
+      email: 'mohammad@alyahya.dev'
     });
   });
 
@@ -104,7 +104,7 @@ describe('User Service', () => {
   it('generateToken should generate token then verify it', async () => {
     const result = await userService.generateToken({
       email: 'mohammad@alyahya.dev',
-      password: 'Aa123456',
+      password: 'Aa123456'
     });
 
     const decoded: TokenResDto = verifyToken(result);
@@ -118,7 +118,7 @@ describe('User Service', () => {
     expect(result).toEqual({
       firstName: 'Mohammad',
       lastName: 'Alyahya',
-      email: 'mohammad@alyahya.dev',
+      email: 'mohammad@alyahya.dev'
     });
   });
 });

@@ -6,7 +6,7 @@ import {
   httpGet,
   httpPost,
   requestBody,
-  requestParam,
+  requestParam
 } from 'inversify-express-utils';
 import PasswordValidator from 'password-validator';
 import { StatusCode } from '../consts/statusCodes';
@@ -14,7 +14,7 @@ import TYPES from '../consts/types';
 import { User } from '../interfaces/user';
 import {
   CreateUserReqDto,
-  CreateUserResDto,
+  CreateUserResDto
 } from '../models/dto/createUserDto';
 import { TokenReqDto } from '../models/dto/tokenDto';
 import { UserDto } from '../models/dto/userDto';
@@ -112,7 +112,7 @@ export class UserController extends BaseHttpController {
       lastname: req.lastName,
       email: req.email,
       password_encrypt: req.password,
-      id: 0,
+      id: 0
     };
 
     const created: UserDto = await this._userService.createUser(user);
@@ -125,7 +125,7 @@ export class UserController extends BaseHttpController {
       firstName: created.firstName,
       lastName: created.lastName,
       email: created.email,
-      token: token,
+      token: token
     };
 
     return this.json(userRes, StatusCode.created);
@@ -139,7 +139,7 @@ export class UserController extends BaseHttpController {
     const userRes = {
       firstName: user.firstName,
       lastName: user.lastName,
-      email: user.email,
+      email: user.email
     };
 
     return this.json(userRes, StatusCode.ok);

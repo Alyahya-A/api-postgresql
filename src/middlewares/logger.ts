@@ -23,7 +23,7 @@ export const loggerMiddleware = async (
     res.status(StatusCode.internalServer).json({
       title: `Internal server error. Please contact to customer service`,
       httpCode: 500,
-      traceId: traceId.toString(),
+      traceId: traceId.toString()
     });
   }
 };

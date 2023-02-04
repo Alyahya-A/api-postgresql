@@ -27,7 +27,7 @@ describe('Order Service', () => {
         firstname: 'Abdulrahman',
         lastname: 'Alyahya',
         email: 'alyahya@alyahya.dev',
-        password_encrypt: '',
+        password_encrypt: ''
       });
     } catch (error) {
       // bypass
@@ -46,11 +46,11 @@ describe('Order Service', () => {
     expect({
       userId: result.user_id,
       products: result.products,
-      status: result.status,
+      status: result.status
     }).toEqual({
       userId: 1,
       status: 'Active',
-      products: [],
+      products: []
     });
   });
 
@@ -75,7 +75,7 @@ describe('Order Service', () => {
       id: createdOrderId,
       user_id: 1,
       status: 'Completed',
-      products: [],
+      products: []
     });
   });
 });

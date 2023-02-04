@@ -28,7 +28,7 @@ describe('Product Service', () => {
 
     const category: Category = await categoryService.createCategory({
       name: 'Jewelry',
-      description: 'Jewelry categoty',
+      description: 'Jewelry categoty'
     });
 
     createdCategoryId = category.id!;
@@ -42,7 +42,7 @@ describe('Product Service', () => {
     const result = await productService.createProduct({
       name: 'Product-3',
       price: '25.00',
-      category_id: createdCategoryId,
+      category_id: createdCategoryId
     });
 
     createdProdcutId = result.id!;
@@ -51,7 +51,7 @@ describe('Product Service', () => {
       id: createdProdcutId,
       name: 'Product-3',
       price: '25.00',
-      category_id: createdCategoryId,
+      category_id: createdCategoryId
     });
   });
 
@@ -62,7 +62,7 @@ describe('Product Service', () => {
       await productService.createProduct({
         name: 'Product 5',
         price: '25.00',
-        category_id: 999,
+        category_id: 999
       });
     } catch (err) {
       if (err instanceof APIError) {
@@ -80,7 +80,7 @@ describe('Product Service', () => {
       await productService.createProduct({
         name: 'Product-3',
         price: '25',
-        category_id: createdCategoryId,
+        category_id: createdCategoryId
       });
     } catch (err) {
       if (err instanceof APIError) {
@@ -104,7 +104,7 @@ describe('Product Service', () => {
       id: createdProdcutId,
       name: 'Product-3',
       price: '25.00',
-      category_id: createdCategoryId,
+      category_id: createdCategoryId
     });
   });
 
@@ -117,8 +117,8 @@ describe('Product Service', () => {
         id: createdProdcutId,
         name: 'Product-3',
         price: '25.00',
-        category_id: createdCategoryId,
-      },
+        category_id: createdCategoryId
+      }
     ]);
   });
 
@@ -129,7 +129,7 @@ describe('Product Service', () => {
       id: createdProdcutId,
       name: 'Product-3',
       price: '25.00',
-      category_id: createdCategoryId,
+      category_id: createdCategoryId
     });
   });
 });

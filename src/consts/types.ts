@@ -20,7 +20,7 @@ const TYPES = {
   CategoryService: Symbol.for('CategoryService'),
   StatusService: Symbol.for('StatusService'),
   UserService: Symbol.for('UserService'),
-  OrderService: Symbol.for('OrderService'),
+  OrderService: Symbol.for('OrderService')
 };
 
 export default TYPES;

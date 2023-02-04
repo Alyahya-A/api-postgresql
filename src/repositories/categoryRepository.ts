@@ -53,7 +53,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
       const { rows }: QueryResult = await connection.query(sql, [
         name,
-        description,
+        description
       ]);
 
       return rows[0];

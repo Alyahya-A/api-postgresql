@@ -6,7 +6,7 @@ import {
   httpGet,
   httpPost,
   requestBody,
-  requestParam,
+  requestParam
 } from 'inversify-express-utils';
 import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';

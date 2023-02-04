@@ -26,7 +26,7 @@ describe('Status Service', () => {
   it('create should add a status', async () => {
     const result = await statusService.createStaus({
       code: 3,
-      name: 'Canceled',
+      name: 'Canceled'
     });
 
     createdStatusId = result.id!;
@@ -34,7 +34,7 @@ describe('Status Service', () => {
     expect(result).toEqual({
       id: createdStatusId,
       code: 3,
-      name: 'Canceled',
+      name: 'Canceled'
     });
   });
 
@@ -44,7 +44,7 @@ describe('Status Service', () => {
     try {
       await statusService.createStaus({
         code: 3,
-        name: 'Canceled',
+        name: 'Canceled'
       });
     } catch (err) {
       if (err instanceof APIError) {
@@ -68,7 +68,7 @@ describe('Status Service', () => {
     expect(result).toEqual({
       id: createdStatusId,
       code: 3,
-      name: 'Canceled',
+      name: 'Canceled'
     });
   });
 
@@ -78,7 +78,7 @@ describe('Status Service', () => {
     expect(result).toEqual({
       id: createdStatusId,
       code: 3,
-      name: 'Canceled',
+      name: 'Canceled'
     });
   });
 });

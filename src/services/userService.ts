@@ -22,7 +22,7 @@ export class UserService {
       users.push({
         firstName: user.firstname,
         lastName: user.lastname,
-        email: user.email,
+        email: user.email
       });
     }
 
@@ -44,7 +44,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email,
+      email: user.email
     };
   }
 
@@ -54,7 +54,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email,
+      email: user.email
     };
   }
 
@@ -81,7 +81,7 @@ export class UserService {
     return {
       firstName: user.firstname,
       lastName: user.lastname,
-      email: user.email,
+      email: user.email
     };
   }
 
@@ -99,7 +99,7 @@ export class UserService {
       { email: user.email, claims: 'user', issuedAt: new Date() },
       config.Secret,
       {
-        expiresIn: '1d',
+        expiresIn: '1d'
       }
     );
   }

@@ -1,7 +1,7 @@
 import {
   DisplayProcessor,
   SpecReporter,
-  StacktraceOption,
+  StacktraceOption
 } from 'jasmine-spec-reporter';
 import SuiteInfo = jasmine.SuiteInfo;
 
@@ -16,11 +16,11 @@ jasmine.getEnv().addReporter(
   new SpecReporter({
     spec: {
       displayStacktrace: StacktraceOption.PRETTY,
-      displayPending: true,
+      displayPending: true
     },
     summary: {
-      displayDuration: false,
+      displayDuration: false
     },
-    customProcessors: [CustomProcessor],
+    customProcessors: [CustomProcessor]
   })
 );

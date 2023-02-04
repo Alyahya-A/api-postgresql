@@ -9,17 +9,17 @@ class LoggerService {
     const prodTransport = new winston.transports.File({
       filename: 'logs/error.log',
       level: 'error',
-      format: formatter,
+      format: formatter
     });
 
     const transport = new winston.transports.Console({
-      format: formatter,
+      format: formatter
     });
 
     this.logger = winston.createLogger({
       level: isDevEnvironment() ? 'trace' : 'error',
       levels: customLevels.levels,
-      transports: [isDevEnvironment() ? prodTransport : prodTransport],
+      transports: [isDevEnvironment() ? prodTransport : prodTransport]
     });
 
     winston.addColors(customLevels.colors);

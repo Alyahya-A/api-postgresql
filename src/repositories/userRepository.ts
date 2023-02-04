@@ -56,7 +56,7 @@ export class UserRepository implements IUserRepository<User> {
         firstname,
         lastname,
         email,
-        encryptPassword(password_encrypt),
+        encryptPassword(password_encrypt)
       ]);
 
       return rows[0];

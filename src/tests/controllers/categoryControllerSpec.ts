@@ -29,7 +29,7 @@ describe('Category controller', () => {
     try {
       token = await userService.generateToken({
         email: userData.email,
-        password: userData.password_encrypt,
+        password: userData.password_encrypt
       });
     } catch (error) {
       if (error instanceof APIError && error.errorCode === 5202) {
@@ -37,12 +37,12 @@ describe('Category controller', () => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          password_encrypt: userData.password_encrypt,
+          password_encrypt: userData.password_encrypt
         });
 
         token = await userService.generateToken({
           email: userData.email,
-          password: userData.password_encrypt,
+          password: userData.password_encrypt
         });
       }
     }
@@ -60,14 +60,14 @@ describe('Category controller', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({
         name: 'Computers',
-        description: 'Computers categoty',
+        description: 'Computers categoty'
       });
 
     expect(response.status).toBe(StatusCode.created);
     expect(response.body).toEqual({
       id: 1,
       name: 'Computers',
-      description: 'Computers categoty',
+      description: 'Computers categoty'
     });
   });
 
@@ -79,8 +79,8 @@ describe('Category controller', () => {
       {
         id: 1,
         name: 'Computers',
-        description: 'Computers categoty',
-      },
+        description: 'Computers categoty'
+      }
     ]);
   });
 
@@ -91,7 +91,7 @@ describe('Category controller', () => {
     expect(response.body).toEqual({
       id: 1,
       name: 'Computers',
-      description: 'Computers categoty',
+      description: 'Computers categoty'
     });
   });
 
@@ -104,7 +104,7 @@ describe('Category controller', () => {
     expect(response.body).toEqual({
       id: 1,
       name: 'Computers',
-      description: 'Computers categoty',
+      description: 'Computers categoty'
     });
   });
 });

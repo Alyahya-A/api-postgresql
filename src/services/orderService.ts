@@ -39,14 +39,14 @@ export class OrderService {
       user_id: userId,
       id: 0,
       products: [],
-      status: '',
+      status: ''
     });
 
     return {
       id: createdOrder.id,
       user_id: createdOrder.user_id,
       products: [],
-      status: 'Active',
+      status: 'Active'
     };
   }
 

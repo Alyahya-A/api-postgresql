@@ -19,10 +19,10 @@ const server = new InversifyExpressServer(
   container,
   null,
   {
-    rootPath: '/api',
+    rootPath: '/api'
   },
   null,
-  CustomAuthProvider,
+  CustomAuthProvider
 );
 
 server.setConfig(app => {

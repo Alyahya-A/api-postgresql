@@ -12,7 +12,7 @@ if (config.ENV === 'test') {
     host: config.PostgresHost,
     database: config.PostgresTestDB,
     user: config.PostgresUser,
-    password: config.PostgresPassword,
+    password: config.PostgresPassword
   });
 } else {
   // default Dev
@@ -22,7 +22,7 @@ if (config.ENV === 'test') {
     host: config.PostgresHost,
     database: config.PostgresDB,
     user: config.PostgresUser,
-    password: config.PostgresPassword,
+    password: config.PostgresPassword
   });
 }
 

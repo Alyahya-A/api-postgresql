@@ -35,7 +35,7 @@ const getConfig = (): Config => {
     Secret: process.env.JWT_SECRET as Secret,
     SaltRounds: process.env.SaltRounds
       ? Number(process.env.SaltRounds)
-      : undefined,
+      : undefined
   };
 };
 

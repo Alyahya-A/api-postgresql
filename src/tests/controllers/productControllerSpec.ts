@@ -32,7 +32,7 @@ describe('Products controller', () => {
     try {
       token = await userService.generateToken({
         email: userData.email,
-        password: userData.password_encrypt,
+        password: userData.password_encrypt
       });
     } catch (error) {
       if (error instanceof APIError && error.errorCode === 5202) {
@@ -40,12 +40,12 @@ describe('Products controller', () => {
           firstname: userData.firstname,
           lastname: userData.lastname,
           email: userData.email,
-          password_encrypt: userData.password_encrypt,
+          password_encrypt: userData.password_encrypt
         });
 
         token = await userService.generateToken({
           email: userData.email,
-          password: userData.password_encrypt,
+          password: userData.password_encrypt
         });
       }
     }
@@ -57,7 +57,7 @@ describe('Products controller', () => {
 
     category = await categoryService.createCategory({
       name: 'Books',
-      description: 'Books categoty',
+      description: 'Books categoty'
     });
 
     console.log(`token: ${token}`);
@@ -74,7 +74,7 @@ describe('Products controller', () => {
       .send({
         name: 'Product 2',
         price: 10,
-        category_id: category.id,
+        category_id: category.id
       });
 
     expect(response.status).toBe(StatusCode.created);
@@ -82,7 +82,7 @@ describe('Products controller', () => {
       id: 2,
       name: 'Product 2',
       price: '10.00',
-      category_id: category.id,
+      category_id: category.id
     });
   });
 
@@ -94,7 +94,7 @@ describe('Products controller', () => {
       id: 2,
       name: 'Product 2',
       price: '10.00',
-      category_id: category.id!,
+      category_id: category.id!
     });
   });
 
@@ -106,7 +106,7 @@ describe('Products controller', () => {
       id: 2,
       name: 'Product 2',
       price: '10.00',
-      category_id: category.id,
+      category_id: category.id
     });
   });
 
@@ -120,7 +120,7 @@ describe('Products controller', () => {
       id: 2,
       name: 'Product 2',
       price: '10.00',
-      category_id: category.id,
+      category_id: category.id
     });
   });
 });

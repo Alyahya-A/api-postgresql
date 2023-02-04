@@ -38,7 +38,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: order.orderid,
             status: order.statusdesc,
             user_id: order.userid,
-            products: [],
+            products: []
           });
 
           productIndex = 0;
@@ -59,7 +59,7 @@ export class OrderRepository implements IOrderRepository<Order> {
               id: order.itemid,
               order_id: order.orderid,
               product_id: order.productid,
-              quantity: order.quantity,
+              quantity: order.quantity
             });
 
             productIndex++;
@@ -111,7 +111,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: item.orderid,
             status: item.statusdesc,
             user_id: item.userid,
-            products: [],
+            products: []
           };
 
           firstRecord = false;
@@ -127,7 +127,7 @@ export class OrderRepository implements IOrderRepository<Order> {
               id: item.itemid,
               order_id: item.orderid,
               product_id: item.productid,
-              quantity: item.quantity,
+              quantity: item.quantity
             });
 
             productIndex++;
@@ -155,7 +155,7 @@ export class OrderRepository implements IOrderRepository<Order> {
 
       const { rows }: QueryResult = await connection.query(sql, [
         orderId,
-        productId,
+        productId
       ]);
 
       return rows[0];
@@ -202,7 +202,7 @@ export class OrderRepository implements IOrderRepository<Order> {
       const { rows }: QueryResult = await connection.query(sql, [
         order_id,
         product_id,
-        quantity,
+        quantity
       ]);
 
       return rows[0];
@@ -315,7 +315,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: order.orderid,
             status: order.statusdesc,
             user_id: order.userid,
-            products: [],
+            products: []
           });
 
           productIndex = 0;
@@ -336,7 +336,7 @@ export class OrderRepository implements IOrderRepository<Order> {
               id: order.itemid,
               order_id: order.orderid,
               product_id: order.productid,
-              quantity: order.quantity,
+              quantity: order.quantity
             });
 
             productIndex++;
