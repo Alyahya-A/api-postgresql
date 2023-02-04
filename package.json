@@ -9,9 +9,9 @@
     "build": "npx tsc && cp ./src/config/config.env ./dist/config/",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "test": "set ENV=test && npm run build && db-migrate db:create storefront_backend_test && db-migrate --env test up && jasmine && db-migrate db:drop storefront_backend_test",
-    "tsc": "tsc",
     "format:check": "prettier --config .prettierrc src/**/*.ts --check",
-    "format:fix": "prettier --config .prettierrc src/**/*.ts --write"
+    "format:fix": "prettier --config .prettierrc src/**/*.ts --write",
+    "db-up": "db-migrate up"
   },
   "author": "Udacity",
   "license": "ISC",

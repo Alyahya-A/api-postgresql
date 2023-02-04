@@ -4,38 +4,24 @@
             "controller": "UserController",
             "endpoints": [
                 {
-                    "route": "GET /users/",
-                    "args": [
-                        "@request undefined",
-                        "@response undefined"
-                    ]
+                    "route": "GET /users/"
                 },
                 {
                     "route": "GET /users/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "POST /users/",
                     "args": [
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 },
                 {
                     "route": "DELETE /users/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
-                    ]
-                },
-                {
-                    "route": "POST /users/:order_id",
-                    "args": [
-                        "@requestParam order_id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 }
             ]
@@ -46,8 +32,7 @@
                 {
                     "route": "POST /token/",
                     "args": [
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 }
             ]
@@ -56,31 +41,24 @@
             "controller": "StatusController",
             "endpoints": [
                 {
-                    "route": "GET /status/",
-                    "args": [
-                        "@request undefined",
-                        "@response undefined"
-                    ]
+                    "route": "GET /status/"
                 },
                 {
                     "route": "GET /status/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "POST /status/",
                     "args": [
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 },
                 {
                     "route": "DELETE /status/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 }
             ]
@@ -89,31 +67,24 @@
             "controller": "ProductController",
             "endpoints": [
                 {
-                    "route": "GET /products/",
-                    "args": [
-                        "@request undefined",
-                        "@response undefined"
-                    ]
+                    "route": "GET /products/"
                 },
                 {
                     "route": "GET /products/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "POST /products/",
                     "args": [
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 },
                 {
                     "route": "DELETE /products/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 }
             ]
@@ -122,51 +93,40 @@
             "controller": "OrderController",
             "endpoints": [
                 {
-                    "route": "GET /orders/",
-                    "args": [
-                        "@request undefined",
-                        "@response undefined"
-                    ]
+                    "route": "GET /orders/"
                 },
                 {
-                    "route": "GET /orders/completed",
-                    "args": [
-                        "@response undefined"
-                    ]
+                    "route": "GET /orders/completed"
+                },
+                {
+                    "route": "GET /orders/active"
                 },
                 {
                     "route": "GET /orders/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
-                    "route": "POST /orders/",
-                    "args": [
-                        "@response undefined"
-                    ]
+                    "route": "POST /orders/"
                 },
                 {
                     "route": "DELETE /orders/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "POST /orders/:orderId/products",
                     "args": [
                         "@requestParam orderId",
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 },
                 {
                     "route": "PUT /orders/:orderId/complete",
                     "args": [
-                        "@requestParam orderId",
-                        "@response undefined"
+                        "@requestParam orderId"
                     ]
                 }
             ]
@@ -175,38 +135,30 @@
             "controller": "CategoryController",
             "endpoints": [
                 {
-                    "route": "GET /categories/",
-                    "args": [
-                        "@request undefined",
-                        "@response undefined"
-                    ]
+                    "route": "GET /categories/"
                 },
                 {
                     "route": "GET /categories/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "POST /categories/",
                     "args": [
-                        "@requestBody undefined",
-                        "@response undefined"
+                        "@requestBody undefined"
                     ]
                 },
                 {
                     "route": "DELETE /categories/:id",
                     "args": [
-                        "@requestParam id",
-                        "@response undefined"
+                        "@requestParam id"
                     ]
                 },
                 {
                     "route": "GET /categories/:categoryId/products",
                     "args": [
-                        "@requestParam categoryId",
-                        "@response undefined"
+                        "@requestParam categoryId"
                     ]
                 }
             ]

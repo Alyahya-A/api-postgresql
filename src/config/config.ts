@@ -31,7 +31,7 @@ const getConfig = (): Config => {
     PostgresTestDB: process.env.POSTGRES_TEST_DB,
     PostgresUser: process.env.POSTGRES_USER,
     PostgresPassword: process.env.POSTGRES_PASSWORD,
-    ENV: process.env.ENV?.toString().trim(),
+    ENV: process.env.ENV?.toString().trim().toLowerCase(),
     Secret: process.env.JWT_SECRET as Secret,
     SaltRounds: process.env.SaltRounds
       ? Number(process.env.SaltRounds)
