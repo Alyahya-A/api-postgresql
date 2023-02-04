@@ -44,13 +44,13 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
     let connection: PoolClient | null = null;
 
     try {
-      const { name } = t;
+      const { code, name } = t;
 
-      const sql: string = `INSERT INTO lk_status (name) VALUES($1) RETURNING *`;
+      const sql: string = `INSERT INTO lk_status (code, name) VALUES($1, $2) RETURNING *`;
 
       connection = await Client.connect();
 
-      const { rows }: QueryResult = await connection.query(sql, [name]);
+      const { rows }: QueryResult = await connection.query(sql, [code, name]);
 
       return rows[0];
     } catch (err) {
@@ -86,6 +86,24 @@ export class StatusRepository implements IStatusRepository<LkStatus> {
       const sql = "SELECT * FROM lk_status where name = $1";
 
       const { rows } = await connection.query(sql, [name]);
+
+      if (rows.length > 0) return true;
+      else return false;
+    } catch (err) {
+      throw new Error(`Could not get staus. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async existsByCode(code: number): Promise<boolean> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      const sql = "SELECT * FROM lk_status where code = $1";
+
+      const { rows } = await connection.query(sql, [code]);
 
       if (rows.length > 0) return true;
       else return false;

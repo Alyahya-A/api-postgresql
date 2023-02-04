@@ -7,24 +7,21 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import supertest from "supertest";
 import { StatusCode } from "../../consts/statusCodes";
 import TYPES from "../../consts/types";
-import { Category } from "../../interfaces/category";
-import { Product } from "../../interfaces/product";
 import { APIError } from "../../models/errors/apiError";
 import app from "../../server";
-import { CategoryService } from "../../services/categoryService";
 import { UserService } from "../../services/userService";
 import { userData } from "../helpers/userTestData";
 
 const request = supertest(app);
 
-describe("Products controller", () => {
+describe("Status controller", () => {
+  const baseUrl = "/api/status";
   let token: string;
-  let category: Category;
 
   beforeAll(async () => {
     console.log("");
     console.log("==============================");
-    console.log("Products controller test START");
+    console.log("Status controller test START");
     console.log("==============================");
 
     const userService = container.get<UserService>(TYPES.UserService);
@@ -50,16 +47,6 @@ describe("Products controller", () => {
       }
     }
 
-    // Add category to use it in test
-    const categoryService = container.get<CategoryService>(
-      TYPES.CategoryService
-    );
-
-    category = await categoryService.createCategory({
-      name: "Books",
-      description: "Books categoty"
-    });
-
     console.log(`token: ${token}`);
   });
 
@@ -67,60 +54,55 @@ describe("Products controller", () => {
     cleanUpMetadata();
   });
 
-  it("posts /products: create product and returns it", async () => {
+  it("posts /status: create category and returns it", async () => {
     const response = await request
-      .post("/api/products")
+      .post(baseUrl)
       .set("Authorization", `Bearer ${token}`)
       .send({
-        name: "Product 2",
-        price: 10,
-        category_id: category.id
+        code: 4,
+        name: "Pending"
       });
 
     expect(response.status).toBe(StatusCode.created);
     expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
+      id: 3,
+      code: 4,
+      name: "Pending"
     });
   });
 
-  it("gets /products: returns a list of products", async () => {
-    const response = await request.get("/api/products");
+  it("gets /status: returns a list of status", async () => {
+    const response = await request.get(baseUrl);
 
     expect(response.status).toBe(StatusCode.ok);
-    expect(response.body as Product[]).toContain({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id!
-    });
+    expect(response.body).toEqual([
+      { id: 1, code: 1, name: "Active" },
+      { id: 2, code: 2, name: "Completed" },
+      { id: 3, code: 4, name: "Pending" }
+    ]);
   });
 
-  it("gets /products/:id: returns a product", async () => {
-    const response = await request.get("/api/products/2");
+  it("gets /status/:id: returns a status", async () => {
+    const response = await request.get(`${baseUrl}/1`);
 
     expect(response.status).toBe(StatusCode.ok);
     expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
+      id: 1,
+      code: 1,
+      name: "Active"
     });
   });
 
-  it("deletes /products/:id: returns the deleted product", async () => {
+  it("deletes /status/:id: returns the deleted status", async () => {
     const response = await request
-      .delete("/api/products/2")
+      .delete(`${baseUrl}/3`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(StatusCode.ok);
     expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
+      id: 3,
+      code: 4,
+      name: "Pending"
     });
   });
 });

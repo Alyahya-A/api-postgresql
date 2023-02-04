@@ -7,24 +7,22 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import supertest from "supertest";
 import { StatusCode } from "../../consts/statusCodes";
 import TYPES from "../../consts/types";
-import { Category } from "../../interfaces/category";
-import { Product } from "../../interfaces/product";
+import { CreateUserResDto } from "../../models/dto/createUserDto";
 import { APIError } from "../../models/errors/apiError";
 import app from "../../server";
-import { CategoryService } from "../../services/categoryService";
 import { UserService } from "../../services/userService";
 import { userData } from "../helpers/userTestData";
 
 const request = supertest(app);
 
-describe("Products controller", () => {
+describe("User controller", () => {
+  const baseUrl = "/api/users";
   let token: string;
-  let category: Category;
 
   beforeAll(async () => {
     console.log("");
     console.log("==============================");
-    console.log("Products controller test START");
+    console.log("User controller test START");
     console.log("==============================");
 
     const userService = container.get<UserService>(TYPES.UserService);
@@ -50,16 +48,6 @@ describe("Products controller", () => {
       }
     }
 
-    // Add category to use it in test
-    const categoryService = container.get<CategoryService>(
-      TYPES.CategoryService
-    );
-
-    category = await categoryService.createCategory({
-      name: "Books",
-      description: "Books categoty"
-    });
-
     console.log(`token: ${token}`);
   });
 
@@ -67,60 +55,90 @@ describe("Products controller", () => {
     cleanUpMetadata();
   });
 
-  it("posts /products: create product and returns it", async () => {
+  it("posts /users: should create user and returns it", async () => {
     const response = await request
-      .post("/api/products")
+      .post(baseUrl)
       .set("Authorization", `Bearer ${token}`)
       .send({
-        name: "Product 2",
-        price: 10,
-        category_id: category.id
+        firstName: "Abdulrahman",
+        lastName: "Alyahya",
+        email: "abdulrahman@alyahya.dev",
+        password: "Aa123456"
       });
 
+    const createdUser: CreateUserResDto = response.body;
+
     expect(response.status).toBe(StatusCode.created);
-    expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
+    expect({
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
+      email: createdUser.email
+    }).toEqual({
+      firstName: "Abdulrahman",
+      lastName: "Alyahya",
+      email: "abdulrahman@alyahya.dev"
     });
   });
 
-  it("gets /products: returns a list of products", async () => {
-    const response = await request.get("/api/products");
+  it("posts /users: should returns invalid email (Error #5002)", async () => {
+    let errorCode: number = 0;
 
-    expect(response.status).toBe(StatusCode.ok);
-    expect(response.body as Product[]).toContain({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id!
-    });
-  });
-
-  it("gets /products/:id: returns a product", async () => {
-    const response = await request.get("/api/products/2");
-
-    expect(response.status).toBe(StatusCode.ok);
-    expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
-    });
-  });
-
-  it("deletes /products/:id: returns the deleted product", async () => {
     const response = await request
-      .delete("/api/products/2")
+      .post(baseUrl)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        firstName: "Abdulrahman",
+        lastName: "Alyahya",
+        email: "abdulrahman@alyahya.a",
+        password: "Aa123456"
+      });
+
+    expect((response.body as APIError).errorCode).toBe(5002);
+  });
+
+  it("gets /users: returns a list of users", async () => {
+    const response = await request
+      .get(baseUrl)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(StatusCode.ok);
+    expect(response.body).toEqual([
+      {
+        firstName: "Abdulrahman",
+        lastName: "Alyahya",
+        email: "alyahya@alyahya.dev"
+      },
+      {
+        firstName: "Abdulrahman",
+        lastName: "Alyahya",
+        email: "abdulrahman@alyahya.dev"
+      }
+    ]);
+  });
+
+  it("gets /users/:id: returns a user", async () => {
+    const response = await request
+      .get(`${baseUrl}/1`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(StatusCode.ok);
     expect(response.body).toEqual({
-      id: 2,
-      name: "Product 2",
-      price: "10.00",
-      category_id: category.id
+      firstName: "Abdulrahman",
+      lastName: "Alyahya",
+      email: "alyahya@alyahya.dev"
+    });
+  });
+
+  it("deletes /users/:id: returns the deleted user", async () => {
+    const response = await request
+      .delete(`${baseUrl}/2`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(StatusCode.ok);
+    expect(response.body).toEqual({
+      firstName: "Abdulrahman",
+      lastName: "Alyahya",
+      email: "abdulrahman@alyahya.dev"
     });
   });
 });

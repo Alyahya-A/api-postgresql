@@ -17,6 +17,7 @@ import {
   CreateUserResDto
 } from "../models/dto/createUserDto";
 import { TokenReqDto } from "../models/dto/tokenDto";
+import { UserDto } from "../models/dto/userDto";
 import { InvalidParamError } from "../models/errors/invalidParamError";
 import { NoDataFoundError } from "../models/errors/noDataError";
 import { UserService } from "../services/userService";
@@ -51,7 +52,7 @@ export class UserController extends BaseHttpController {
   // Get all users
   @httpGet("/", TYPES.AuthMiddleware)
   async index() {
-    const allUser: User[] = await this._userService.getAllUser();
+    const allUser: UserDto[] = await this._userService.getAllUser();
 
     if (allUser.length == 0) {
       return this.json(new NoDataFoundError(), StatusCode.notFound);
@@ -63,7 +64,7 @@ export class UserController extends BaseHttpController {
   //  Get user by id
   @httpGet("/:id", TYPES.AuthMiddleware)
   async getProductById(@requestParam("id") id: number) {
-    const user: User = await this._userService.getUserById(id);
+    const user: UserDto = await this._userService.getUserById(id);
 
     if (!user) {
       return this.json(new NoDataFoundError(), StatusCode.notFound);
@@ -114,16 +115,15 @@ export class UserController extends BaseHttpController {
       id: 0
     };
 
-    const created: User = await this._userService.createUser(user);
+    const created: UserDto = await this._userService.createUser(user);
 
     const token: string = await this._userService.generateToken(
       new TokenReqDto(req.email, req.password)
     );
 
     const userRes: CreateUserResDto = {
-      id: created.id!,
-      firstName: created.firstname,
-      lastName: created.lastname,
+      firstName: created.firstName,
+      lastName: created.lastName,
       email: created.email,
       token: token
     };
@@ -134,12 +134,11 @@ export class UserController extends BaseHttpController {
   // Delete user
   @httpDelete("/:id", TYPES.AuthMiddleware)
   async deleteProduct(@requestParam("id") id: number) {
-    const user: User = await this._userService.deleteUser(id);
+    const user: UserDto = await this._userService.deleteUser(id);
 
     const userRes = {
-      id: user.id,
-      firstName: user.firstname,
-      lastName: user.lastname,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email
     };
 

@@ -108,8 +108,8 @@ describe("Order controller", () => {
     );
 
     const category: Category = await categoryService.createCategory({
-      name: "Computers",
-      description: "Computers categoty"
+      name: "Electronics",
+      description: "Electronics categoty"
     });
 
     const productService = container.get<ProductService>(TYPES.ProductService);

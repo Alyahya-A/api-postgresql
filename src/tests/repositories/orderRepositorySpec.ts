@@ -7,9 +7,9 @@ import { cleanUpMetadata } from "inversify-express-utils";
 import TYPES from "../../consts/types";
 import { OrderRepository } from "../../repositories/orderRepository";
 
-const orderRepository = container.get<OrderRepository>(TYPES.OrderRepository);
-
 describe("Order Repository", () => {
+  const orderRepository = container.get<OrderRepository>(TYPES.OrderRepository);
+
   beforeAll(() => {
     console.log("");
     console.log("===========================");

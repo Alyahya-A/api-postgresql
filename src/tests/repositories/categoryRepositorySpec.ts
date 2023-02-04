@@ -5,17 +5,17 @@ import { container } from "../../di-container";
 // Other imports
 import { cleanUpMetadata } from "inversify-express-utils";
 import TYPES from "../../consts/types";
-import { ProductRepository } from "../../repositories/productRepository";
+import { CategoryRepository } from "../../repositories/categoryRepository";
 
-describe("Product Repository", () => {
-  const productRepository = container.get<ProductRepository>(
-    TYPES.ProductRepository
+describe("Category Repository", () => {
+  const categotyRepository = container.get<CategoryRepository>(
+    TYPES.CategoryRepository
   );
 
   beforeAll(() => {
     console.log("");
     console.log("=============================");
-    console.log("Product Repository test START");
+    console.log("Category Repository test START");
     console.log("=============================");
   });
 
@@ -25,28 +25,28 @@ describe("Product Repository", () => {
 
   // BaseRepository -- START
   it("has a index method", () => {
-    expect(productRepository.index).toBeDefined();
+    expect(categotyRepository.index).toBeDefined();
   });
   it("has a getById method", () => {
-    expect(productRepository.getById).toBeDefined();
+    expect(categotyRepository.getById).toBeDefined();
   });
   it("has a create method", () => {
-    expect(productRepository.create).toBeDefined();
+    expect(categotyRepository.create).toBeDefined();
   });
 
   it("has a exists method", () => {
-    expect(productRepository.exists).toBeDefined();
+    expect(categotyRepository.exists).toBeDefined();
   });
 
   it("has a delete method", () => {
-    expect(productRepository.delete).toBeDefined();
+    expect(categotyRepository.delete).toBeDefined();
   });
   // BaseRepository -- END
   it("has a existsByName method", () => {
-    expect(productRepository.existsByName).toBeDefined();
+    expect(categotyRepository.existsByName).toBeDefined();
   });
 
-  it("has a getCategoryProducts method", () => {
-    expect(productRepository.getCategoryProducts).toBeDefined();
+  it("has a existsByName method", () => {
+    expect(categotyRepository.existsByName).toBeDefined();
   });
 });

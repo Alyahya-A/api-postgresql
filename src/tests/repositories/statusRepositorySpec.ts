@@ -5,17 +5,17 @@ import { container } from "../../di-container";
 // Other imports
 import { cleanUpMetadata } from "inversify-express-utils";
 import TYPES from "../../consts/types";
-import { ProductRepository } from "../../repositories/productRepository";
+import { StatusRepository } from "../../repositories/statusRepository";
 
-describe("Product Repository", () => {
-  const productRepository = container.get<ProductRepository>(
-    TYPES.ProductRepository
+describe("Status Repository", () => {
+  const statusRepository = container.get<StatusRepository>(
+    TYPES.StatusRepository
   );
 
   beforeAll(() => {
     console.log("");
     console.log("=============================");
-    console.log("Product Repository test START");
+    console.log("Status Repository test START");
     console.log("=============================");
   });
 
@@ -25,28 +25,28 @@ describe("Product Repository", () => {
 
   // BaseRepository -- START
   it("has a index method", () => {
-    expect(productRepository.index).toBeDefined();
+    expect(statusRepository.index).toBeDefined();
   });
   it("has a getById method", () => {
-    expect(productRepository.getById).toBeDefined();
+    expect(statusRepository.getById).toBeDefined();
   });
   it("has a create method", () => {
-    expect(productRepository.create).toBeDefined();
+    expect(statusRepository.create).toBeDefined();
   });
 
   it("has a exists method", () => {
-    expect(productRepository.exists).toBeDefined();
+    expect(statusRepository.exists).toBeDefined();
   });
 
   it("has a delete method", () => {
-    expect(productRepository.delete).toBeDefined();
+    expect(statusRepository.delete).toBeDefined();
   });
   // BaseRepository -- END
   it("has a existsByName method", () => {
-    expect(productRepository.existsByName).toBeDefined();
+    expect(statusRepository.existsByName).toBeDefined();
   });
 
-  it("has a getCategoryProducts method", () => {
-    expect(productRepository.getCategoryProducts).toBeDefined();
+  it("has a existsByName method", () => {
+    expect(statusRepository.existsByName).toBeDefined();
   });
 });

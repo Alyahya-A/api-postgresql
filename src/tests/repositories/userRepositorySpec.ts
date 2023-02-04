@@ -5,17 +5,15 @@ import { container } from "../../di-container";
 // Other imports
 import { cleanUpMetadata } from "inversify-express-utils";
 import TYPES from "../../consts/types";
-import { ProductRepository } from "../../repositories/productRepository";
+import { UserRepository } from "../../repositories/userRepository";
 
-describe("Product Repository", () => {
-  const productRepository = container.get<ProductRepository>(
-    TYPES.ProductRepository
-  );
+describe("User Repository", () => {
+  const userRepository = container.get<UserRepository>(TYPES.UserRepository);
 
   beforeAll(() => {
     console.log("");
     console.log("=============================");
-    console.log("Product Repository test START");
+    console.log("User Repository test START");
     console.log("=============================");
   });
 
@@ -25,28 +23,32 @@ describe("Product Repository", () => {
 
   // BaseRepository -- START
   it("has a index method", () => {
-    expect(productRepository.index).toBeDefined();
+    expect(userRepository.index).toBeDefined();
   });
   it("has a getById method", () => {
-    expect(productRepository.getById).toBeDefined();
+    expect(userRepository.getById).toBeDefined();
   });
   it("has a create method", () => {
-    expect(productRepository.create).toBeDefined();
+    expect(userRepository.create).toBeDefined();
   });
 
   it("has a exists method", () => {
-    expect(productRepository.exists).toBeDefined();
+    expect(userRepository.exists).toBeDefined();
   });
 
   it("has a delete method", () => {
-    expect(productRepository.delete).toBeDefined();
+    expect(userRepository.delete).toBeDefined();
   });
   // BaseRepository -- END
-  it("has a existsByName method", () => {
-    expect(productRepository.existsByName).toBeDefined();
+  it("has a getByEmail method", () => {
+    expect(userRepository.getByEmail).toBeDefined();
   });
 
-  it("has a getCategoryProducts method", () => {
-    expect(productRepository.getCategoryProducts).toBeDefined();
+  it("has a existsByEmail method", () => {
+    expect(userRepository.existsByEmail).toBeDefined();
+  });
+
+  it("has a existsByUser method", () => {
+    expect(userRepository.existsByUser).toBeDefined();
   });
 });

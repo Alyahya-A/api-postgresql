@@ -19,8 +19,17 @@ export class StatusService {
   public async createStaus(body: LkStatus): Promise<LkStatus> {
     if (await this._statusRepo.existsByName(body.name)) {
       throw new APIError(
-        `Staus \"${body.name}\" is already exists`,
+        `Staus name \"${body.name}\" is already exists`,
         4200,
+        StatusCode.badRequest,
+        true
+      );
+    }
+
+    if (await this._statusRepo.existsByCode(body.code)) {
+      throw new APIError(
+        `Staus code \"${body.code}\" is already exists`,
+        4201,
         StatusCode.badRequest,
         true
       );
@@ -37,7 +46,7 @@ export class StatusService {
     if (!(await this._statusRepo.exists(id))) {
       throw new APIError(
         `Status \"${id}\" is not exists`,
-        4201,
+        4202,
         StatusCode.badRequest,
         true
       );

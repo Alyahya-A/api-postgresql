@@ -1,5 +1,3 @@
-import { BaseEntity } from "../../interfaces/baseEntity";
-
 export class CreateUserReqDto {
   firstName: string;
   lastName: string;
@@ -19,21 +17,18 @@ export class CreateUserReqDto {
   }
 }
 
-export class CreateUserResDto implements BaseEntity {
-  id: number;
+export class CreateUserResDto {
   firstName: string;
   lastName: string;
   email: string;
   token: string;
 
   constructor(
-    id: number,
     firstName: string,
     lastName: string,
     email: string,
     token: string
   ) {
-    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
