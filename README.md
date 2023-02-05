@@ -201,7 +201,7 @@ All possible errors that inherit from `BaseError`:
 
 All the above errors are returned to the user as `badRequest (400)`. So, the previous errors are handled and it is considered as a trusted error since all errors are `badRequest` and `isOperational == true`.
 
-Now [loggerMiddleware](/src/middlewares/logger.ts) cames. This middleware will catch any exceptions within the app, if the error is trusted it will return to the user with its details (such as message, code.. etc). On another hand if the exception is unhandled and occured in any function the middleware will catch it and log the error to `.log` file with the `traceId`, then a generic error will return to the user with the `traceId` like the following:
+Now [exceptionHandlerMiddleware](/src/middlewares/exceptionHandlerMiddleware.ts.ts) cames. This middleware will catch any exceptions within the app, if the error is trusted it will return to the user with its details (such as message, code.. etc). On another hand if the exception is unhandled and occured in any function the middleware will catch it and log the error to `.log` file with the `traceId`, then a generic error will return to the user with the `traceId` like the following:
 
 ```json
 {
@@ -211,7 +211,7 @@ Now [loggerMiddleware](/src/middlewares/logger.ts) cames. This middleware will c
 }
 ```
 
-So, in this way we catch all the exceptions that occur in our app within the `loggerMiddleware` if the exception is trusted (means it was handled) then return it to the user; otherwise (unhandled exception), log the error and return a generic error to the user (don't return the exception to the user)
+So, in this way we catch all the exceptions that occur in our app within the `exceptionHandlerMiddleware` if the exception is trusted (means it was handled) then return it to the user; otherwise (unhandled exception), log the error and return a generic error to the user (don't return the exception to the user)
 
 ## Testing
 

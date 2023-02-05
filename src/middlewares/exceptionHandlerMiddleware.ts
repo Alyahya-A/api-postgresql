@@ -3,7 +3,7 @@ import { Guid } from 'guid-typescript';
 import { StatusCode } from '../consts/statusCodes';
 import { errorHandler } from '../utils/errorHandler';
 
-export const exceptionHandler = async (
+export const exceptionHandlerMiddleware = async (
   err: Error,
   req: express.Request,
   res: express.Response,
