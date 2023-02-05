@@ -10,32 +10,32 @@ dotenv.config({ path: path.resolve(__dirname, '../config/config.env') });
 // as someone could skip these varibales or not setup a .env file at all
 
 interface Config {
-  Port: number | undefined;
-  PostgresHost: string | undefined;
-  PostgresDB: string | undefined;
-  PostgresTestDB: string | undefined;
-  PostgresUser: string | undefined;
-  PostgresPassword: string | undefined;
-  ENV: string | undefined;
+  Port: number;
+  PostgresHost: string;
+  PostgresPort: number;
+  PostgresDB: string;
+  PostgresTestDB: string;
+  PostgresUser: string;
+  PostgresPassword: string;
+  ENV: string;
   Secret: Secret;
-  SaltRounds: number | undefined;
+  SaltRounds: number;
 }
 
 // Loading process.env as ENV interface
 
 const getConfig = (): Config => {
   return {
-    Port: process.env.PORT ? Number(process.env.PORT) : undefined,
-    PostgresHost: process.env.POSTGRES_HOST,
-    PostgresDB: process.env.POSTGRES_DB,
-    PostgresTestDB: process.env.POSTGRES_TEST_DB,
-    PostgresUser: process.env.POSTGRES_USER,
-    PostgresPassword: process.env.POSTGRES_PASSWORD,
-    ENV: process.env.ENV?.toString().trim().toLowerCase(),
+    Port: Number(process.env.PORT),
+    PostgresHost: process.env.POSTGRES_HOST!,
+    PostgresPort: Number(process.env.POSTGRES_PORT),
+    PostgresDB: process.env.POSTGRES_DB!,
+    PostgresTestDB: process.env.POSTGRES_TEST_DB!,
+    PostgresUser: process.env.POSTGRES_USER!,
+    PostgresPassword: process.env.POSTGRES_PASSWORD!,
+    ENV: process.env.ENV!.toString().trim().toLowerCase(),
     Secret: process.env.JWT_SECRET as Secret,
-    SaltRounds: process.env.SaltRounds
-      ? Number(process.env.SaltRounds)
-      : undefined
+    SaltRounds: Number(process.env.SaltRounds)
   };
 };
 

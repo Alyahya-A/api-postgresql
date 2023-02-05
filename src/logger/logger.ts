@@ -19,7 +19,7 @@ class LoggerService {
     this.logger = winston.createLogger({
       level: isDevEnvironment() ? 'trace' : 'error',
       levels: customLevels.levels,
-      transports: [isDevEnvironment() ? prodTransport : prodTransport]
+      transports: [isDevEnvironment() ? transport : prodTransport]
     });
 
     winston.addColors(customLevels.colors);

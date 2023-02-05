@@ -8,7 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import { InversifyExpressServer } from 'inversify-express-utils';
 import config from './config/config';
-import { loggerMiddleware } from './middlewares/logger';
+import { exceptionHandler } from './middlewares/exceptionHandler';
 import EndpointNotFound404Middleware from './middlewares/pageNotFound404';
 import requestLoggerMiddleware from './middlewares/requestLogger';
 import { CustomAuthProvider } from './providers/customAuthProvider';
@@ -37,7 +37,7 @@ server.setConfig(app => {
 const app = server.build();
 const port: number = config.Port ?? 3001; // Default port
 
-app.use(loggerMiddleware);
+app.use(exceptionHandler);
 
 // Add page not found middleware
 app.use(EndpointNotFound404Middleware);

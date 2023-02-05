@@ -10,6 +10,7 @@ if (config.ENV === 'test') {
 
   Client = new Pool({
     host: config.PostgresHost,
+    port: config.PostgresPort,
     database: config.PostgresTestDB,
     user: config.PostgresUser,
     password: config.PostgresPassword
@@ -20,6 +21,7 @@ if (config.ENV === 'test') {
 
   Client = new Pool({
     host: config.PostgresHost,
+    port: config.PostgresPort,
     database: config.PostgresDB,
     user: config.PostgresUser,
     password: config.PostgresPassword

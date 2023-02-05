@@ -1,11 +1,11 @@
 import express from 'express';
 import { Guid } from 'guid-typescript';
-import { StatusCode } from '../../consts/statusCodes';
-import { logger } from '../../logger/logger';
-import { BaseError } from './baseError';
+import { StatusCode } from '../consts/statusCodes';
+import { logger } from '../logger/logger';
+import { BaseError } from '../models/errors/baseError';
 
 class ErrorHandler {
-  public async handleError(
+  public async logError(
     req: express.Request,
     traceId: Guid,
     err: Error
