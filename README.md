@@ -137,8 +137,8 @@ App will run on port `3000` and the database runs on port `5432`
 
 ### Endpoint Access
 
-All endpoints are defined in [routeInfo](routeInfo.json) file provided by `inversify-express-utils`.  
-Also, a `Postman Collections` added contains all endpoints. [postman_collection](storefront_backend.postman_collection.json)
+All endpoints are defined in [routeInfo](/docs/routeInfo.json) file provided by `inversify-express-utils`.  
+Also, a `Postman Collections` added contains all endpoints. [postman_collection](docs/storefront_backend.postman_collection.json)
 
 ### Token and Authentication
 
@@ -212,6 +212,10 @@ Now [exceptionHandlerMiddleware](/src/middlewares/exceptionHandlerMiddleware.ts.
 ```
 
 So, in this way we catch all the exceptions that occur in our app within the `exceptionHandlerMiddleware` if the exception is trusted (means it was handled) then return it to the user; otherwise (unhandled exception), log the error and return a generic error to the user (don't return the exception to the user)
+
+### Error codes
+
+You can find all business errors in [ErrorCodes.xlsx](docs/ErrorCodes.xlsx) file.
 
 ## Testing
 
