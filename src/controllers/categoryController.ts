@@ -12,6 +12,7 @@ import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
 import { Category } from '../interfaces/category';
 import { Product } from '../interfaces/product';
+import { CategoryWithProducts } from '../models/dto/CategoryWithProducts';
 import { InvalidParamError } from '../models/errors/invalidParamError';
 import { NoDataFoundError } from '../models/errors/noDataError';
 import { CategoryService } from '../services/categoryService';
@@ -40,6 +41,34 @@ export class CategoryController extends BaseHttpController {
 
     return this.json(allCategories, StatusCode.ok);
   }
+
+    //  Get all categories with its products
+    @httpGet('/products')
+    async GetAllCategoriesWithProducts() {
+      const categories: Category[] =
+        await this._categoryService.getAllCategories();
+  
+      const categoriesRes: CategoryWithProducts[] = [];
+  
+      for (const categoty of categories) {
+        const products: Product[] =
+          await this._productService.getCategoryProducts(categoty.id!);
+  
+        const categoryRes: CategoryWithProducts = new CategoryWithProducts(
+          categoty.id!,
+          categoty.name,
+          products
+        );
+  
+        categoriesRes.push(categoryRes);
+      }
+  
+      if (categoriesRes?.length == 0) {
+        return this.json(new NoDataFoundError(), StatusCode.notFound);
+      }
+  
+      return this.json(categoriesRes, StatusCode.ok);
+    }
 
   //  Get category by id
   @httpGet('/:id')
@@ -89,4 +118,6 @@ export class CategoryController extends BaseHttpController {
 
     return this.json(products, StatusCode.ok);
   }
+
+
 }

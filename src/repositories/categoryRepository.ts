@@ -35,7 +35,7 @@ export class CategoryRepository implements ICategoryRepository<Category> {
 
       return rows[0];
     } catch (err) {
-      throw new Error(`Could not get product by id. Error: ${err}`);
+      throw new Error(`Could not get category by id. Error: ${err}`);
     } finally {
       connection?.release();
     }

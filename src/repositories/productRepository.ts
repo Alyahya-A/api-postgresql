@@ -11,9 +11,11 @@ export class ProductRepository implements IProductRepository<Product> {
 
     try {
       connection = await Client.connect();
-      const sql = 'SELECT * FROM product';
+      const sql = 'SELECT p.id, p.name, p.price, c.id as cateogryId, c.name as categoryName FROM product p left join category c on p.category_id = c.id';
 
       const { rows } = await connection.query(sql);
+
+      console.log(`ROW: ${JSON.stringify(rows)}`)
 
       return rows;
     } catch (err) {
@@ -27,7 +29,7 @@ export class ProductRepository implements IProductRepository<Product> {
     let connection: PoolClient | null = null;
 
     try {
-      const sql: string = `SELECT * FROM product WHERE id = $1`;
+      const sql: string = `SELECT p.id, p.name, p.price, c.id as cateogryId, c.name as categoryName FROM product p left join category c on p.category_id = c.id WHERE p.id = $1`;
 
       connection = await Client.connect();
 
