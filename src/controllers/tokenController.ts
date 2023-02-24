@@ -7,6 +7,7 @@ import {
 } from 'inversify-express-utils';
 import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
+import { User } from '../interfaces/user';
 import { TokenReqDto } from '../models/dto/tokenDto';
 import { InvalidParamError } from '../models/errors/invalidParamError';
 import { UserService } from '../services/userService';
@@ -15,7 +16,7 @@ import { emailValidator } from '../utils/emailValidator';
 @controller('/token')
 export class TokenController extends BaseHttpController {
   constructor(
-    @inject(TYPES.UserService) private readonly _tokenService: UserService
+    @inject(TYPES.UserService) private readonly _userService: UserService
   ) {
     super();
   }
@@ -40,8 +41,17 @@ export class TokenController extends BaseHttpController {
       );
     }
 
-    const token: string = await this._tokenService.generateToken(req);
+    const token: string = await this._userService.generateToken(req);
 
-    return this.json(token, StatusCode.created);
+    const user: User = await this._userService.getUserByEmail(req.email);
+
+    const userRes = {
+      firstName: user.firstname,
+      lastName: user.lastname,
+      email: user.email,
+      token: token
+    };
+
+    return this.json(userRes, StatusCode.created);
   }
 }

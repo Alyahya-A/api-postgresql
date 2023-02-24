@@ -2,6 +2,7 @@ import { BaseEntity } from './baseEntity';
 
 export interface Order extends BaseEntity {
   products: OrderItem[];
+  totalAmount: number;
   user_id: number;
   status: string;
 }

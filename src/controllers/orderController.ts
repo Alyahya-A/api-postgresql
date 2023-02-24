@@ -14,6 +14,7 @@ import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
 import { UserContext } from '../contexts/userContext';
 import { Order, OrderItem } from '../interfaces/order';
+import { PlaceOrderReq } from '../models/dto/placeOrderReq';
 import { APIError } from '../models/errors/apiError';
 import { NoDataFoundError } from '../models/errors/noDataError';
 import { OrderService } from '../services/orderService';
@@ -32,7 +33,9 @@ export class OrderController extends BaseHttpController {
   // Get all orders
   @httpGet('/')
   async index() {
-    const allOrders: Order[] = await this._orderService.getAllOrders();
+    const allOrders: Order[] = await this._orderService.getAllOrdersByUserId(
+      this._userContext.getId()
+    );
 
     if (allOrders.length == 0) {
       return this.json(new NoDataFoundError(), StatusCode.notFound);
@@ -87,6 +90,17 @@ export class OrderController extends BaseHttpController {
   @httpPost('/')
   async create() {
     const created: Order = await this._orderService.createOrder(
+      this._userContext.getId()
+    );
+
+    return this.json(created, StatusCode.created);
+  }
+
+  // Place order with all products items
+  @httpPost('/place')
+  async placeOrder(@requestBody() req: PlaceOrderReq) {
+    const created: Order = await this._orderService.placeOrder(
+      req,
       this._userContext.getId()
     );
 

@@ -12,9 +12,10 @@ export class OrderRepository implements IOrderRepository<Order> {
     try {
       connection = await Client.connect();
       let sql =
-        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
+        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, p.price as productprice, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
       sql += ' FROM orders o ';
-      sql += ' LEFT JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN product p on p.id = i.product_id ';
       sql += ' LEFT JOIN lk_status s on o.status_id = s.code ';
       sql += ' order by i.order_id, i.product_id ';
 
@@ -38,6 +39,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: order.orderid,
             status: order.statusdesc,
             user_id: order.userid,
+            totalAmount: 0,
             products: []
           });
 
@@ -64,6 +66,85 @@ export class OrderRepository implements IOrderRepository<Order> {
 
             productIndex++;
           }
+
+          orders[orderIndex].totalAmount += order.productprice * order.quantity;
+        }
+
+        prevOrderId = order.orderid;
+        prevProdcutId = order.productid;
+      }
+
+      return orders;
+    } catch (err) {
+      throw new Error(`Could not get order with all products. Error: ${err}`);
+    } finally {
+      connection?.release();
+    }
+  }
+
+  async getUserOrders(userId: number): Promise<Order[]> {
+    let connection: PoolClient | null = null;
+
+    try {
+      connection = await Client.connect();
+      let sql =
+        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, p.price as productprice, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
+      sql += ' FROM orders o ';
+      sql += ' JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN product p on p.id = i.product_id ';
+      sql += ' LEFT JOIN lk_status s on o.status_id = s.code ';
+      sql += ' where o.user_id = $1 ';
+      sql += ' order by i.order_id, i.product_id ';
+
+      const { rows } = await connection.query(sql, [userId]);
+
+      const orders: Order[] = [];
+
+      let prevOrderId = 0;
+      let prevProdcutId = 0;
+
+      let orderIndex = -1;
+      let productIndex = -1;
+
+      // The output will be:
+      // [{"orderid":1,"userid":1,"productid":1,"quantity":1,"statusdesc":"Active","itemid":2}]
+
+      for (const order of rows) {
+        // New order
+        if (prevOrderId !== order.orderid) {
+          orders.push({
+            id: order.orderid,
+            status: order.statusdesc,
+            user_id: order.userid,
+            totalAmount: 0,
+            products: []
+          });
+
+          productIndex = 0;
+          orderIndex++;
+        }
+
+        // to avoid returning 1 index of empty object in orders.products, if there is no items we must return empty list
+        if (order.itemid > 0) {
+          // if it's same order & product we will add the quantity to the prev. (So, no duplictaed products in orders.products list)
+          if (
+            prevOrderId === order.orderid &&
+            prevProdcutId === order.productid
+          ) {
+            orders[orderIndex].products[productIndex - 1].quantity +=
+              order.quantity;
+          } else {
+            orders[orderIndex].products.push({
+              id: order.itemid,
+              order_id: order.orderid,
+              product_id: order.productid,
+              quantity: order.quantity
+            });
+
+            productIndex++;
+          }
+
+          orders[orderIndex].totalAmount += order.productprice * order.quantity;
         }
 
         prevOrderId = order.orderid;
@@ -83,9 +164,10 @@ export class OrderRepository implements IOrderRepository<Order> {
 
     try {
       let sql =
-        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
+        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, p.price as ProductPrice, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
       sql += ' FROM orders o ';
-      sql += ' LEFT JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN product p on p.id = i.product_id ';
       sql += ' LEFT JOIN lk_status s on o.status_id = s.code ';
       sql += ' WHERE o.id = $1 ';
       sql += ' order by i.product_id ';
@@ -111,6 +193,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: item.orderid,
             status: item.statusdesc,
             user_id: item.userid,
+            totalAmount: 0,
             products: []
           };
 
@@ -132,6 +215,8 @@ export class OrderRepository implements IOrderRepository<Order> {
 
             productIndex++;
           }
+
+          order.totalAmount += item.productprice * item.quantity;
         }
 
         prevProdcutId = item.productid;
@@ -288,9 +373,10 @@ export class OrderRepository implements IOrderRepository<Order> {
       connection = await Client.connect();
 
       let sql =
-        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
+        ' SELECT o.id as OrderId, o.user_id as UserId, i.product_id as ProductId, p.price as productprice, i.quantity as Quantity, s.name as StatusDesc, i.id as ItemId ';
       sql += ' FROM orders o ';
-      sql += ' LEFT JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN order_item i on o.id = i.order_id ';
+      sql += ' JOIN product p on p.id = i.product_id ';
       sql += ' LEFT JOIN lk_status s on o.status_id = s.code ';
       sql += ' WHERE o.user_id = $1 and o.status_id = 2 ';
       sql += ' order by i.order_id, i.product_id ';
@@ -315,6 +401,7 @@ export class OrderRepository implements IOrderRepository<Order> {
             id: order.orderid,
             status: order.statusdesc,
             user_id: order.userid,
+            totalAmount: 0,
             products: []
           });
 
@@ -341,6 +428,8 @@ export class OrderRepository implements IOrderRepository<Order> {
 
             productIndex++;
           }
+
+          orders[orderIndex].totalAmount += order.productprice * order.quantity;
         }
 
         prevOrderId = order.orderid;

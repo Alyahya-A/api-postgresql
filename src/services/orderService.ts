@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify';
 import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
 import { Order, OrderItem } from '../interfaces/order';
+import { PlaceOrderReq } from '../models/dto/placeOrderReq';
 import { APIError } from '../models/errors/apiError';
 import { OrderRepository } from '../repositories/orderRepository';
 import { ProductRepository } from '../repositories/productRepository';
@@ -17,6 +18,10 @@ export class OrderService {
 
   public getAllOrders = async (): Promise<Order[]> => {
     return await this._orderRepo.index();
+  };
+
+  public getAllOrdersByUserId = async (userId: number): Promise<Order[]> => {
+    return await this._orderRepo.getUserOrders(userId);
   };
 
   public async getActiveOrder(userId: number): Promise<Order | null> {
@@ -39,6 +44,7 @@ export class OrderService {
       user_id: userId,
       id: 0,
       products: [],
+      totalAmount: 0,
       status: ''
     });
 
@@ -46,8 +52,45 @@ export class OrderService {
       id: createdOrder.id,
       user_id: createdOrder.user_id,
       products: [],
+      totalAmount: 0,
       status: 'Active'
     };
+  }
+
+  public async placeOrder(req: PlaceOrderReq, userId: number): Promise<Order> {
+    const createdOrder: Order = await this._orderRepo.create({
+      user_id: userId,
+      id: 0,
+      totalAmount: 0,
+      products: [],
+      status: ''
+    });
+
+    for (const item of req.products) {
+      if (!(await this._productRepo.exists(item.product_id))) {
+        throw new APIError(
+          `Product \"${item.product_id}\" not found`,
+          2208,
+          StatusCode.badRequest,
+          true
+        );
+      }
+
+      if (item.quantity < 1) {
+        throw new APIError(
+          `Invalid quantity. Must be more than zero!`,
+          2209,
+          StatusCode.badRequest,
+          true
+        );
+      }
+
+      item.order_id = createdOrder.id!;
+
+      await this._orderRepo.addItem(item);
+    }
+
+    return await this._orderRepo.getById(createdOrder.id!);
   }
 
   public async addItemToOrder(order: OrderItem): Promise<OrderItem> {

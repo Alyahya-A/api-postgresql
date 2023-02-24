@@ -4,6 +4,7 @@ import { BaseMiddleware } from 'inversify-express-utils';
 import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
 import { TokenResDto } from '../models/dto/tokenDto';
+import { UnauthorizedError } from '../models/errors/unauthorizedError';
 import { UserService } from '../services/userService';
 import { verifyToken } from '../utils/verifyToken';
 
@@ -54,6 +55,6 @@ export class AuthMiddleware extends BaseMiddleware {
   }
 
   notAuthorized(res: express.Response) {
-    res.status(StatusCode.unauthorized).json('Unauthorized');
+    res.status(StatusCode.unauthorized).json(new UnauthorizedError());
   }
 }
