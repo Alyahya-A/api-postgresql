@@ -4,11 +4,13 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon src/server.ts",
+    "zip": "cd dist && Compress-Archive . Archive.zip && cd ..",
+    "build": "npm run clean && tsc && copy \"./src/config/\\config.production.env\" \"./dist/config/\" && mkdir \"./dist/.elasticbeanstalk/\"  && copy \"./.elasticbeanstalk\" \"./dist/.elasticbeanstalk/\" && copy package.json \"./dist/\" && copy .npmrc \"./dist/\" && copy package.json \"./dist/\"",
+    "clean": "if exist \"./dist\" rmdir /s /q \"./dist\"",
+    "dev": "SET NODE_ENV=development && nodemon src/server.ts",
     "esm": "ts-node-esm src/server.ts ",
-    "build": "npx tsc && cp ./src/config/config.env ./dist/config/",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "set ENV=test && npm run build && db-migrate db:create storefront_backend_test && db-migrate --env test up && jasmine && db-migrate db:drop storefront_backend_test",
+    "test": "SET NODE_ENV=test && npm run build && db-migrate db:create storefront_backend_test && db-migrate --env test up && jasmine && db-migrate db:drop storefront_backend_test",
     "format:check": "prettier --config .prettierrc src/**/*.ts --check",
     "format:fix": "prettier --config .prettierrc src/**/*.ts --write",
     "db-up": "db-migrate up"

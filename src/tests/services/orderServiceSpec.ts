@@ -75,6 +75,7 @@ describe('Order Service', () => {
       id: createdOrderId,
       user_id: 1,
       status: 'Completed',
+      totalAmount: 0,
       products: []
     });
   });

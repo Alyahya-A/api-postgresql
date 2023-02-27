@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import config from '../config/config';
+import { config } from '../config/config';
 import { TokenResDto } from '../models/dto/tokenDto';
 
 export const verifyToken = (token: string): TokenResDto => {

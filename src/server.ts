@@ -7,11 +7,11 @@ import { container } from './di-container';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { InversifyExpressServer } from 'inversify-express-utils';
-import config from './config/config';
 import { exceptionHandlerMiddleware } from './middlewares/exceptionHandlerMiddleware';
 import EndpointNotFound404Middleware from './middlewares/endpointNotFoundMiddleware';
 import requestLoggerMiddleware from './middlewares/requestLoggerMiddleware';
 import { CustomAuthProvider } from './providers/customAuthProvider';
+import { config } from './config/config';
 
 // console.clear();
 
