@@ -9,6 +9,7 @@ import {
   requestParam
 } from 'inversify-express-utils';
 import PasswordValidator from 'password-validator';
+import { config } from '../config/config';
 import { StatusCode } from '../consts/statusCodes';
 import TYPES from '../consts/types';
 import { User } from '../interfaces/user';
@@ -60,6 +61,12 @@ export class UserController extends BaseHttpController {
 
     return this.json(allUser, StatusCode.ok);
   }
+
+  // // Get all users
+  // @httpGet('/config')
+  // async config() {
+  //   return this.json(config, StatusCode.ok);
+  // }
 
   //  Get user by id
   @httpGet('/:id', TYPES.AuthMiddleware)

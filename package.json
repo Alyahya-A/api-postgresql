@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.ts",
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
+  },
   "scripts": {
     "zip": "cd dist && Compress-Archive . Archive.zip && cd ..",
-    "build": "npm run clean && tsc && copy \"./src/config/\\config.production.env\" \"./dist/config/\" && mkdir \"./dist/.elasticbeanstalk/\"  && copy \"./.elasticbeanstalk\" \"./dist/.elasticbeanstalk/\" && copy package.json \"./dist/\" && copy .npmrc \"./dist/\" && copy package.json \"./dist/\"",
+    "build": "npm run clean && tsc && copy \"./src/config/\\config.production.env\" \"./dist/config/\" && mkdir \"./dist/.elasticbeanstalk/\"  && copy \"./.elasticbeanstalk\" \"./dist/.elasticbeanstalk/\" && copy package.json \"./dist/\" && copy .npmrc \"./dist/\" && copy package.json \"./dist/\" && copy package-lock.json \"./dist/\"",
     "clean": "if exist \"./dist\" rmdir /s /q \"./dist\"",
     "dev": "SET NODE_ENV=development && nodemon src/server.ts",
+    "prod": "SET NODE_ENV=production && nodemon src/server.ts",
     "esm": "ts-node-esm src/server.ts ",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
     "test": "SET NODE_ENV=test && npm run build && db-migrate db:create storefront_backend_test && db-migrate --env test up && jasmine && db-migrate db:drop storefront_backend_test",
